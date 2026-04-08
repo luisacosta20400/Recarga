@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Banco Falabella - PSE</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:'Inter', sans-serif;
+  background:#f5f6f7;
+}
+
+/* HEADER */
+.header{
+  padding:20px 30px;
+}
+.header img{
+  height:45px;
+}
+
+/* MAIN */
+.container{
+  max-width:1100px;
+  margin:0 auto;
+  padding:20px;
+}
+
+.card{
+  background:#fff;
+  border-radius:12px;
+  padding:30px;
+  display:flex;
+  gap:30px;
+}
+
+/* LEFT FORM */
+.left{
+  flex:1;
+}
+
+.title{
+  font-size:28px;
+  margin-bottom:20px;
+}
+
+label{
+  display:block;
+  margin-top:15px;
+  font-size:14px;
+}
+
+input, select{
+  width:100%;
+  padding:14px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  margin-top:5px;
+}
+
+/* REMOVE SELECT ARROW */
+select{
+  appearance:none;
+}
+
+/* LINK */
+.link{
+  color:#2ca01c;
+  margin-top:10px;
+  display:inline-block;
+  font-size:14px;
+}
+
+/* RIGHT INFO */
+.right{
+  flex:1;
+  background:#f3f4f6;
+  padding:20px;
+  border-radius:10px;
+}
+
+.right img{
+  width:100%;
+  margin-top:10px;
+}
+
+/* BUTTONS */
+.buttons{
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+  margin-top:20px;
+}
+
+.btn{
+  padding:12px 25px;
+  border-radius:8px;
+  border:none;
+}
+
+.btn-gray{
+  background:#e5e7eb;
+}
+
+.btn-disabled{
+  background:#d1d5db;
+}
+
+/* FOOTER */
+.footer{
+  background:#111;
+  color:#fff;
+  padding:20px;
+  margin-top:40px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:12px;
+}
+
+.footer img{
+  height:20px;
+}
+
+/* MOBILE */
+@media(max-width:900px){
+
+  .card{
+    flex-direction:column;
+  }
+
+  .buttons{
+    flex-direction:column;
+  }
+
+  .btn{
+    width:100%;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <img src="logo.png">
+</div>
+
+<div class="container">
+
+  <div class="card">
+
+    <div class="left">
+
+      <div class="title">PSE pagos en línea</div>
+
+      <label>Tipo de persona</label>
+      <select>
+        <option>Natural</option>
+      </select>
+
+      <label>Tipo de documento</label>
+      <select>
+        <option>Seleccionar tipo de documento</option>
+      </select>
+
+      <label>Número de documento</label>
+      <input type="text" placeholder="Ej. 1234567">
+
+      <label>Clave internet</label>
+      <input type="password" placeholder="Ingresa tu clave">
+
+      <a class="link">Recuperar o crear tu clave de internet ></a>
+
+    </div>
+
+    <div class="right">
+      <h3>Necesitarás tu Clave Dinámica</h3>
+      <p>Para realizar esta transacción solicitaremos tu Clave Dinámica.</p>
+      <p>Para obtenerla deberás ingresar a tu APP Banco Falabella.</p>
+      <img src="img.webp">
+    </div>
+
+  </div>
+
+  <div class="buttons">
+    <button class="btn btn-gray">Cancelar</button>
+    <button class="btn btn-disabled">Ingresar</button>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div>© Banco Falabella 2026. Todos los derechos reservados.</div>
+  <div>
+    Pagos Banco Falabella Versión 3.1.170
+    <br>
+    <img src="Vigilado.svg">
+  </div>
+</div>
+
+</body>
+</html>

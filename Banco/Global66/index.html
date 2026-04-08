@@ -1,0 +1,138 @@
+<html lang="es"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Global66 - Login</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:'Inter', sans-serif;
+  background:#f5f6fb;
+}
+
+.header{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:15px 25px;
+  border-bottom:1px solid #e0e0e0;
+}
+
+.header img{
+  height:28px;
+}
+
+.header span{
+  font-weight:600;
+  color:#3f51b5;
+}
+
+.container{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:40px 20px;
+}
+
+.logo{
+  width:60px;
+  height:60px;
+  background:#3f51b5;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:15px;
+}
+
+.logo img{
+  width:28px;
+}
+
+h1{
+  font-size:22px;
+  color:#3f51b5;
+  margin:5px 0;
+}
+
+.sub{
+  color:#6b6f8c;
+  margin-bottom:30px;
+}
+
+.form{
+  width:100%;
+  max-width:420px;
+}
+
+input{
+  width:100%;
+  padding:16px;
+  border-radius:12px;
+  border:1px solid #ddd;
+  margin-bottom:15px;
+  font-size:15px;
+}
+
+.info{
+  margin:30px 0;
+  color:#3f51b5;
+  font-weight:500;
+  text-align:center;
+}
+
+.btn{
+  width:100%;
+  max-width:420px;
+  padding:16px;
+  border:none;
+  border-radius:12px;
+  background:#3f51b5;
+  color:#fff;
+  font-size:16px;
+  font-weight:600;
+}
+
+@media(max-width:600px){
+  .container{
+    padding:20px;
+  }
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+  <img src="logo.svg">
+  
+</div>
+
+<div class="container">
+
+  <div class="logo">
+    <img src="gif.gif">
+  </div>
+
+  <h1>Ingresa a Global66</h1>
+  <div class="sub">Completa tus datos para ingresar</div>
+
+  <div class="form">
+    <input type="email" placeholder="Email">
+    <input type="password" placeholder="Contraseña">
+  </div>
+
+  <div class="info">Estás iniciando un pago con PSE</div>
+
+  <button class="btn">Ingresar</button>
+
+</div>
+
+
+
+</body></html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Itaú PSE</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:'Inter', sans-serif;
+  background:#f3f3f3;
+}
+
+/* LAYOUT */
+.main{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
+  padding:40px;
+}
+
+.container{
+  display:flex;
+  gap:80px;
+  align-items:center;
+  max-width:1100px;
+  width:100%;
+}
+
+/* LEFT */
+.left{
+  max-width:420px;
+  width:100%;
+}
+
+.logo{
+  width:55px;
+  margin-bottom:20px;
+}
+
+h1{
+  font-size:36px;
+  margin-bottom:25px;
+  color:#111;
+}
+
+label{
+  display:block;
+  margin-top:15px;
+  font-size:14px;
+  color:#333;
+}
+
+input, select{
+  width:100%;
+  padding:14px;
+  border-radius:10px;
+  border:1px solid #ccc;
+  margin-top:6px;
+  font-size:14px;
+  background:#f7f7f7;
+}
+
+/* quitar flecha select */
+select{
+  appearance:none;
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  background-image:none;
+}
+
+/* LINK */
+.link{
+  display:block;
+  margin:18px 0;
+  color:#0066cc;
+  font-size:14px;
+}
+
+/* BUTTON */
+.btn{
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:12px;
+  background:#ddd;
+  color:#999;
+  font-weight:600;
+  transition:0.3s;
+}
+
+.btn.active{
+  background:#ff6200;
+  color:#fff;
+}
+
+/* RIGHT */
+.right img{
+  width:360px;
+  border-radius:30px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* MOBILE */
+@media(max-width:900px){
+  .container{
+    flex-direction:column;
+    gap:20px;
+  }
+
+  .right{
+    display:none;
+  }
+
+  .main{
+    padding:20px;
+  }
+
+  h1{
+    font-size:28px;
+  }
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="main">
+  <div class="container">
+
+    <div class="left">
+      <img src="logo.png" class="logo">
+
+      <h1>Ingresa tus datos</h1>
+
+      <label>Tipo de documento</label>
+      <select>
+        <option>Cédula de ciudadanía</option>
+      </select>
+
+      <label>Número de documento</label>
+      <input type="text" id="doc" placeholder="Ingresa número de documento">
+
+      <label>Clave</label>
+      <input type="password" id="pass" placeholder="Ingresa tu clave">
+
+      <a href="#" class="link">¿Tienes problemas con tu clave?</a>
+
+      <button id="btn" class="btn">Ingresar</button>
+    </div>
+
+    <div class="right">
+      <img src="img.png">
+    </div>
+
+  </div>
+</div>
+
+<script>
+const doc = document.getElementById('doc');
+const pass = document.getElementById('pass');
+const btn = document.getElementById('btn');
+
+function activar(){
+  if(doc.value.trim() !== "" && pass.value.trim() !== ""){
+    btn.classList.add('active');
+  }else{
+    btn.classList.remove('active');
+  }
+}
+
+doc.addEventListener('input', activar);
+pass.addEventListener('input', activar);
+</script>
+
+</body>
+</html>

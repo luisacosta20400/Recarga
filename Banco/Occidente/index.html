@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Banco de Occidente - Login</title>
+
+<style>
+@font-face{
+  font-family:'Poppins';
+  src:url('Poppins-Regular.ttf');
+}
+@font-face{
+  font-family:'PoppinsMed';
+  src:url('Poppins-Medium.ttf');
+}
+@font-face{
+  font-family:'PoppinsSemi';
+  src:url('Poppins-SemiBold.ttf');
+}
+
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:'Poppins', Arial;
+  display:flex;
+  height:100vh;
+}
+
+/* LEFT */
+.left{
+  width:50%;
+  background:url('fondo.jpg') center/cover no-repeat;
+  position:relative;
+}
+.left::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(255,255,255,0.6);
+}
+
+/* RIGHT */
+.right{
+  width:50%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#f5f6f7;
+}
+
+.card{
+  background:#fff;
+  padding:40px;
+  border-radius:16px;
+  width:380px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.1);
+  text-align:center;
+}
+
+.logo{
+  margin-bottom:15px;
+}
+.logo img{height:35px;}
+
+h2{
+  font-family:'PoppinsSemi';
+  margin:10px 0;
+}
+
+.subtitle{
+  color:#2d7be5;
+  margin-bottom:20px;
+}
+
+/* form */
+.row{
+  display:flex;
+  gap:10px;
+}
+
+input, select{
+  width:100%;
+  padding:14px;
+  border-radius:8px;
+  border:1px solid #b5c7e3;
+  margin-top:8px;
+}
+
+label{
+  display:block;
+  text-align:left;
+  margin-top:15px;
+  font-family:'PoppinsMed';
+}
+
+/* buttons */
+.buttons{
+  display:flex;
+  gap:10px;
+  margin-top:20px;
+}
+
+.btn{
+  flex:1;
+  padding:12px;
+  border-radius:8px;
+  cursor:pointer;
+  font-family:'PoppinsMed';
+}
+
+.btn-outline{
+  border:1px solid #2d7be5;
+  color:#2d7be5;
+  background:#fff;
+}
+
+.btn-primary{
+  background:#2d7be5;
+  color:#fff;
+  border:none;
+}
+
+/* MOBILE */
+@media(max-width:900px){
+  body{flex-direction:column;}
+  .left{width:100%; height:200px;}
+  .right{width:100%; padding:20px;}
+  .card{
+    width:100%;
+    padding:25px;
+  }
+}
+
+select{
+  appearance:none;
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  background-image:none;
+}
+</style>
+
+</head>
+<body>
+
+<div class="left"></div>
+
+<div class="right">
+  <div class="card">
+    <div class="logo">
+      <img src="logo.svg">
+    </div>
+
+    <p>¡Bienvenido! a tus,</p>
+    <h2>Pagos Electrónicos</h2>
+
+    <label>Identificación</label>
+    <div class="row">
+      <select>
+        <option>CC</option>
+      </select>
+      <input type="text" placeholder="Ej:1093238993">
+    </div>
+
+    <label>Contraseña</label>
+    <input type="password" placeholder="Ingresa tu contraseña">
+
+    <div class="buttons">
+      <button class="btn btn-outline">Volver al comercio</button>
+      <button class="btn btn-primary">Ingresar</button>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
