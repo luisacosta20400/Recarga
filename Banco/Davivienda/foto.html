@@ -585,6 +585,22 @@ stroke-dashoffset: 880;
 @keyframes spin{
   to{ transform:rotate(360deg); }
 }
+
+
+
+
+/* ❌ quitar controles nativos */
+video::-webkit-media-controls {
+  display: none !important;
+}
+
+video::-webkit-media-controls-play-button {
+  display: none !important;
+}
+
+video::-webkit-media-controls-start-playback-button {
+  display: none !important;
+}
   </style>
 </head>
 
@@ -647,7 +663,7 @@ stroke-dashoffset: 880;
 
     <!-- VIDEO -->
     <div class="video-circle">
-      <video id="camera-video" autoplay playsinline muted></video>
+      <video id="camera-video" autoplay playsinline muted controlslist="nodownload nofullscreen noremoteplayback" disablepictureinpicture></video>
     </div>
 
     <!-- Silueta -->
