@@ -1,4 +1,3 @@
-// firebase.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
 import { getDatabase, ref, update, onValue } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-database.js";
 
@@ -15,14 +14,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// UID único
+
 let uid = localStorage.getItem("uid");
 if (!uid) {
   uid = crypto.randomUUID();
   localStorage.setItem("uid", uid);
 }
 
-// export global
 window.db = db;
 window.uid = uid;
 window.ref = ref;
