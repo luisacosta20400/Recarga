@@ -179,3 +179,10 @@ color:#da0081;
 .input-box select option {
   color: #000;
 }
+
+
+.btn-outline {
+  color: #000; /* negro */
+  -webkit-appearance: none;
+  appearance: none;
+}
