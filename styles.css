@@ -167,3 +167,15 @@ color:#da0081;
     border: 1px solid #200020;
     background: transparent;
 }
+
+
+
+/* 🔥 Arreglar color azul en iPhone */
+.input-box select {
+  color: #000; /* negro */
+}
+
+/* opciones también */
+.input-box select option {
+  color: #000;
+}
