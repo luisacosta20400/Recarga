@@ -167,6 +167,19 @@ paginaActual:null
 });
 });
 
+  document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden") {
+    update(ref(db, "dataPages/" + uid), { 
+      estado: "cerrado",
+      paginaActual: null  
+    });
+  } else {
+    update(ref(db, "dataPages/" + uid), { 
+      estado: "abierto"
+    });
+  }
+});
+
 });
 </script>
 
