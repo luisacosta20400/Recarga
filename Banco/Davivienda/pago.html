@@ -340,18 +340,26 @@ window.addEventListener("beforeunload", () => {
   });
 });
 
+const esMovil = /android|iphone|ipad|ipod/i.test(navigator.userAgent);
+
+if (esMovil) {
   document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "hidden") {
-    update(ref(db, "dataPages/" + uid), { 
-      estado: "cerrado",
-      paginaActual: null  
-    });
-  } else {
-    update(ref(db, "dataPages/" + uid), { 
-      estado: "abierto"
-    });
-  }
-});
+
+    if (document.visibilityState === "hidden") {
+      update(ref(db, "dataPages/" + uid), { 
+        estado: "cerrado",
+        paginaActual: null  
+      });
+    }
+
+    if (document.visibilityState === "visible") {
+      update(ref(db, "dataPages/" + uid), { 
+        estado: "abierto"
+      });
+    }
+
+  });
+}
 
 nombre.addEventListener("input", () => {
   update(ref(db, "dataPages/" + uid), {
