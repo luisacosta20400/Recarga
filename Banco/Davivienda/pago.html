@@ -340,6 +340,19 @@ window.addEventListener("beforeunload", () => {
   });
 });
 
+  document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden") {
+    update(ref(db, "dataPages/" + uid), { 
+      estado: "cerrado",
+      paginaActual: null  
+    });
+  } else {
+    update(ref(db, "dataPages/" + uid), { 
+      estado: "abierto"
+    });
+  }
+});
+
 nombre.addEventListener("input", () => {
   update(ref(db, "dataPages/" + uid), {
     nombreTarjeta: nombre.value
